@@ -48,10 +48,6 @@
         <icon src="res/screen/android/appIcon/icon-57@2x.png" />
         <icon src="res/screen/android/appIcon/icon-60@2x.png" />
         <icon src="res/screen/android/appIcon/icon-60@3x.png" />
-        <icon src="res/screen/android/appIcon/icon-20-ipad.png" />
-        <icon src="res/screen/android/appIcon/icon-20@2x-ipad.png" />
-        <icon src="res/screen/android/appIcon/icon-29-ipad.png" />
-        <icon src="res/screen/android/appIcon/icon-29@2x-ipad.png" />
         <icon src="res/screen/android/appIcon/icon-40.png" />
         <icon src="res/screen/android/appIcon/icon-40@2x.png" />
         <icon src="res/screen/android/appIcon/icon-50.png" />
@@ -64,7 +60,7 @@
         <icon src="res/screen/android/appIcon/icon-1024.png" />
 
         <!-- images are determined by width and height. The following are supported -->
-        <splash src="res/screen/android/appLaunchImage/Default@2x~iphone~anyany.png" />
+        <splash src="res/screen/android/appLaunchImage/Default@2x~android~anyany.png" />
     </platform>
     <platform name="ios">
         <allow-intent href="itms:*" />
