@@ -1,0 +1,34 @@
+{
+  "name": "AndroidWrapper",
+  "displayName": "AndroidWrapper",
+  "version": "1.0.0",
+  "description": "AndroidWrapper",
+  "main": "index.js",
+  "scripts": {},
+  "keywords": [
+    "ecosystem:cordova"
+  ],
+  "author": "walker",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "cordova-android": "^8.1.0",
+    "cordova-ios": "^5.1.1",
+    "cordova-plugin-device": "^2.0.3",
+    "cordova-plugin-splashscreen": "^5.0.3",
+    "device": "^0.3.10"
+  },
+  "devDependencies": {
+    "cordova-plugin-whitelist": "^1.3.4"
+  },
+  "cordova": {
+    "plugins": {
+      "cordova-plugin-whitelist": {},
+      "cordova-plugin-device": {},
+      "cordova-plugin-splashscreen": {}
+    },
+    "platforms": [
+      "ios",
+      "android"
+    ]
+  }
+}
