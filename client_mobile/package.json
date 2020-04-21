@@ -13,6 +13,7 @@
   "dependencies": {
     "cordova-android": "^8.1.0",
     "cordova-ios": "^5.1.1",
+    "cordova-plugin-bridge": "file:../plugins_cordova/cordova-plugin-bridge",
     "cordova-plugin-device": "^2.0.3",
     "cordova-plugin-splashscreen": "^5.0.3",
     "device": "^0.3.10"
@@ -24,7 +25,8 @@
     "plugins": {
       "cordova-plugin-whitelist": {},
       "cordova-plugin-device": {},
-      "cordova-plugin-splashscreen": {}
+      "cordova-plugin-splashscreen": {},
+      "cordova-plugin-bridge": {}
     },
     "platforms": [
       "ios",
