@@ -36,6 +36,9 @@
     <platform name="android">
         <allow-intent href="market:*" />
 
+        <!-- disable the splashscreen -->
+        <!-- <preference name="SplashScreenDelay" value="0" /> -->
+
         <!-- icons -->
         <icon src="res/screen/android/appIcon/icon-20@2x.png" />
         <icon src="res/screen/android/appIcon/icon-20@3x.png" />

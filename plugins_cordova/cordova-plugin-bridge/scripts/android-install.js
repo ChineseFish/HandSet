@@ -41,11 +41,11 @@ module.exports = function (context) {
     }
 
     //
-    targetDir  = path.join(projectRoot, "platforms", "android", "app", "src", "main", "java", packageName.replace(/\./g, path.sep), "bridge");
+    targetDir  = path.join(projectRoot, "platforms", "android", "app", "src", "main", "java", packageName.replace(/\./g, path.sep));
     console.log(targetDir);
 
     //
-    let targetFiles = [];
+    let targetFiles = ["MainActivity.java"];
 
     if (['after_plugin_add', 'after_plugin_install'].indexOf(context.hook) === -1) {
         // remove it
@@ -70,8 +70,11 @@ module.exports = function (context) {
         );
         
         // create directory
-        shell.mkdir('-p', targetDir);
-
+        if(!fs.existsSync())
+        {
+            shell.mkdir('-p', targetDir);
+        }
+        
         // sync the content
         targetFiles.forEach(function (targetFile) {
             fs.readFile(path.join(context.opts.plugin.dir, 'src', 'android', targetFile), {
@@ -81,7 +84,7 @@ module.exports = function (context) {
                     throw err;
                 }
 
-                data = data.replace(/^package __PACKAGE_NAME__;/m, 'package ' + packageName + '.bridge;');
+                data = data.replace(/^package __PACKAGE_NAME__;/m, 'package ' + packageName + ";");
                 fs.writeFileSync(path.join(targetDir, targetFile), data);
             });
         });
