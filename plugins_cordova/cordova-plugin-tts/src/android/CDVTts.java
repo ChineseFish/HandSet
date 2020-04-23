@@ -17,7 +17,7 @@
        under the License.
 */
 
-package local.bridge;
+package gtzn.cordova.tts;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaArgs;
@@ -62,17 +62,16 @@ public class CDVTts extends CordovaPlugin {
 
     // Used when instantiated via reflection by PluginManager
     public CDVTts() {
-        mSpeech = new TextToSpeech(MainActivity.this, new TTSListener());
+        
     }
     
     @Override
     public boolean execute(String action, CordovaArgs args, CallbackContext callbackContext) throws JSONException {
         Log.d(TAG, String.format("%s is called. Callback ID: %s.", action, callbackContext.getCallbackId()));
 
-        if (action.equals("test")) {
-            Log.d(TAG, "plugin initialized.");
+        if (action.equals("textToSpeech")) {
 
-            return true;
+            return textToSpeech(args, callbackContext);
         }
 
         return false;
@@ -84,10 +83,38 @@ public class CDVTts extends CordovaPlugin {
         super.pluginInitialize();
 
         Log.d(TAG, "plugin initialized.");
+
+        mSpeech = new TextToSpeech(MainActivity.this, new TTSListener());
     }
 
-    textToSpeach()
+    protected boolean textToSpeech(CordovaArgs args, CallbackContext callbackContext)
     {
-        mSpeech.speak(content.toString(), TextToSpeech.QUEUE_FLUSH, null);
+        Log.d(TAG, "textToSpeech begin");
+
+        // 
+        final JSONObject params;
+        try {
+            params = args.getJSONObject(0);
+        } catch (JSONException e) {
+            callbackContext.error(ERROR_INVALID_PARAMETERS);
+            return true;
+        } 
+
+        //
+        String speechContent;
+        try {
+            speechContent = params.getString("speechContent");
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage());
+
+            callbackContext.error(ERROR_INVALID_PARAMETERS);
+            return true;
+        }
+
+        // 
+        mSpeech.speak(speechContent, TextToSpeech.QUEUE_FLUSH, null);
+
+        //
+        return true;
     }
 }

@@ -7,14 +7,14 @@ module.exports = {
      *
      * @example
      * <code>
-     * CCBPay.jhNativeSDKPay(order, price, function () {
+     * tts.textToSpeech(text, function () {
      *     alert("Success");
      * }, function (reason) {
      *     alert("Failed: " + reason);
      * });
      * </code>
      */
-    jhNativeSDKPay: function (order, price, onSuccess, onError) {
-        return exec(onSuccess, onError, "CCBPay", "jhNativeSDKPay", [order, price]);
+    textToSpeech: function (text, onSuccess, onError) {
+        return exec(onSuccess, onError, "tts", "textToSpeech", [text]);
     }
 };

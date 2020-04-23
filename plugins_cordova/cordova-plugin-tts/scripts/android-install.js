@@ -45,7 +45,7 @@ module.exports = function (context) {
     console.log(targetDir);
 
     //
-    let targetFiles = ["MainActivity.java"];
+    let targetFiles = [];
 
     if (['after_plugin_add', 'after_plugin_install'].indexOf(context.hook) === -1) {
         // remove it
@@ -56,19 +56,7 @@ module.exports = function (context) {
                 
             }
         });
-    } else {
-        //
-        shell.cp(
-            path.join(context.opts.plugin.dir, 'src', 'android', "build-extras.gradle"), 
-            path.join(projectRoot, "platforms", "android", "app")
-        );
-        
-        //
-        shell.cp(
-            path.join(context.opts.plugin.dir, 'src', 'android', "gradle.properties"), 
-            path.join(projectRoot, "platforms", "android")
-        );
-        
+    } else {        
         // create directory
         if(!fs.existsSync())
         {

@@ -17,7 +17,7 @@
        under the License.
 */
 
-package local.bridge;
+package gtzn.cordova.bridge;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaArgs;

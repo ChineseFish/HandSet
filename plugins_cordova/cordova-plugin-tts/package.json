@@ -1,9 +1,9 @@
 {
-  "name": "cordova-plugin-bridge",
+  "name": "cordova-plugin-tts",
   "version": "0.0.1",
-  "description": "A cordova plugin, a JS version of bridge SDK",
+  "description": "A cordova plugin, a JS version of tts SDK",
   "cordova": {
-    "id": "cordova-plugin-bridge",
+    "id": "cordova-plugin-tts",
     "platforms": [
       "ios"
     ]
@@ -14,7 +14,7 @@
   },
   "keywords": [
     "cordova",
-    "bridge",
+    "tts",
     "ecosystem:cordova",
     "cordova-ios"
   ],
