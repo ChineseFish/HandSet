@@ -77,8 +77,14 @@ public class CDVTts extends CordovaPlugin {
         Log.d(TAG, String.format("%s is called. Callback ID: %s.", action, callbackContext.getCallbackId()));
 
         if (action.equals("textToSpeech")) {
+            String text = args.getString(0);
 
-            return textToSpeech(args, callbackContext);
+            if(text.length() == 0)
+            {
+                return false;
+            }
+
+            return textToSpeech(text, callbackContext);
         }
 
         return false;
@@ -94,32 +100,15 @@ public class CDVTts extends CordovaPlugin {
         mSpeech = new TextToSpeech(MainActivity.getMainActivity(), new TTSListener());
     }
 
-    protected boolean textToSpeech(CordovaArgs args, CallbackContext callbackContext)
+    protected boolean textToSpeech(String text, CallbackContext callbackContext)
     {
         Log.d(TAG, "textToSpeech begin");
-
+      
         // 
-        final JSONObject params;
-        try {
-            params = args.getJSONObject(0);
-        } catch (JSONException e) {
-            callbackContext.error(ERROR_INVALID_PARAMETERS);
-            return true;
-        } 
+        mSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null);
 
         //
-        String speechContent;
-        try {
-            speechContent = params.getString("speechContent");
-        } catch (Exception e) {
-            Log.e(TAG, e.getMessage());
-
-            callbackContext.error(ERROR_INVALID_PARAMETERS);
-            return true;
-        }
-
-        // 
-        mSpeech.speak(speechContent, TextToSpeech.QUEUE_FLUSH, null);
+        callbackContext.success();
 
         //
         return true;
