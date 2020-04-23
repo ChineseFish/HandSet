@@ -29,7 +29,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.speech.tts.TextToSpeech;
 import android.util.Log;
+
+import com.tongda.putuoshanlvyoubashi.MainActivity;
+
+import java.util.Locale;
 
 public class CDVTts extends CordovaPlugin {
     private class TTSListener implements TextToSpeech.OnInitListener {
@@ -60,6 +65,8 @@ public class CDVTts extends CordovaPlugin {
 
     private static final String TAG = "CDVTts";
 
+    public static final String ERROR_INVALID_PARAMETERS = "参数格式错误";
+    
     // Used when instantiated via reflection by PluginManager
     public CDVTts() {
         
@@ -84,7 +91,7 @@ public class CDVTts extends CordovaPlugin {
 
         Log.d(TAG, "plugin initialized.");
 
-        mSpeech = new TextToSpeech(MainActivity.this, new TTSListener());
+        mSpeech = new TextToSpeech(MainActivity.getMainActivity(), new TTSListener());
     }
 
     protected boolean textToSpeech(CordovaArgs args, CallbackContext callbackContext)

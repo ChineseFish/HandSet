@@ -39,13 +39,9 @@
             </feature>
         </config-file>
 
-        <config-file target="AndroidManifest.xml" parent="/*">
-           
-        </config-file>
-
-        <config-file target="AndroidManifest.xml" parent="/manifest/application">
-            
-        </config-file>
+        <edit-config file="AndroidManifest.xml" target="/manifest/application" mode="merge">
+            <application android:usesCleartextTraffic="true" />
+        </edit-config>
 
         <source-file src="src/android/CDVTts.java" target-dir="gtzn/cordova/tts" />
     </platform>

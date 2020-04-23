@@ -27,6 +27,17 @@ import org.apache.cordova.*;
 
 public class MainActivity extends CordovaActivity
 {
+    public MainActivity() {
+        mainActivity = this;
+    }
+
+    public static MainActivity getMainActivity() {
+        return mainActivity;
+    }
+
+
+    private static MainActivity mainActivity;
+
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
