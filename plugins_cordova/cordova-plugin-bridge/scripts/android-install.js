@@ -57,18 +57,24 @@ module.exports = function (context) {
             }
         });
     } else {
-        //
+        // modify build.gradle
         shell.cp(
             path.join(context.opts.plugin.dir, 'src', 'android', "build-extras.gradle"), 
             path.join(projectRoot, "platforms", "android", "app")
         );
         
-        //
+        // modify gradle properties
         shell.cp(
             path.join(context.opts.plugin.dir, 'src', 'android', "gradle.properties"), 
             path.join(projectRoot, "platforms", "android")
         );
         
+        // modify cordova WebView implementation
+        shell.cp(
+            path.join(context.opts.plugin.dir, 'src', "android", "SystemWebViewClient.java"), 
+            path.join(projectRoot, "platforms", "android", "CordovaLib", "src", "org", "apache", "cordova", "engine")
+        );
+
         // create directory
         if(!fs.existsSync())
         {

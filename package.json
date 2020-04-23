@@ -2,7 +2,7 @@
     "name": "AndroidWrapper",
     "version": "0.0.1",
     "scripts": {
-        "bridgeAndroid": "cd client_bridge && npm run build && cd ../client_mobile && rm -rf platforms/android && cordova prepare android",
+        "bridgeAndroid": "cd client_bridge && npm run build",
         "mobileAndroid": "cd client_mobile && rm -rf platforms/android && rm -rf plugins && cordova prepare android",
         "clearAndroid": "cd client_mobile && rm -rf platforms/android",
         "android": "cd client_mobile && cordova run android"

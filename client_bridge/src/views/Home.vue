@@ -22,15 +22,22 @@ export default {
         // add device ready event
         document.addEventListener("deviceready", () => {
             
+            //
+            tts.textToSpeech("你好呀", function () {
+                alert("Success");
+            }, function (reason) {
+                alert("Failed: " + reason);
+            });
+
         }, false);
 
-        // try to jump
-        this.jump();
+        // // try to jump
+        // this.jump();
 
-        // 
-        setInterval(() => {
-            this.jump();
-        }, 500);
+        // // 
+        // setInterval(() => {
+        //     this.jump();
+        // }, 500);
     },
 
     methods: {
