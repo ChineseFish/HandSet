@@ -1,6 +1,8 @@
 <template>
 <div id="main">
     <h1>加载中请耐心等待一会儿</h1>
+    <textarea v-model="text"></textarea>
+    <button @click="speak">语音播报</button>
 </div>
 </template>
 
@@ -14,6 +16,7 @@ export default {
         return {
             iframeUrl: iframeUrl,
             checkNetworkTimekout: undefined,
+            text: ""
         }
     },
 
@@ -22,12 +25,7 @@ export default {
         // add device ready event
         document.addEventListener("deviceready", () => {
             
-            //
-            tts.textToSpeech("你好呀", function () {
-                alert("Success");
-            }, function (reason) {
-                alert("Failed: " + reason);
-            });
+            
 
         }, false);
 
@@ -41,6 +39,15 @@ export default {
     },
 
     methods: {
+        speak() {
+            //
+            tts.textToSpeech(this.text, function () {
+                console.log("Success");
+            }, function (reason) {
+                console.log("Failed: " + reason);
+            });
+        },
+
         jump() {
             if(/Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent))
             {
