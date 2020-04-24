@@ -21,9 +21,7 @@ export default {
     {
         // add device ready event
         document.addEventListener("deviceready", () => {
-            
-            
-
+            console.log("device ready, now can call plugin");
         }, false);
 
         // try to jump

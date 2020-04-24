@@ -81,11 +81,15 @@ public class CDVTts extends CordovaPlugin {
 
             if(text.length() == 0)
             {
+                callbackContext.error(ERROR_INVALID_PARAMETERS);
+                
                 return false;
             }
 
             return textToSpeech(text, callbackContext);
         }
+
+        callbackContext.error(ERROR_INVALID_PARAMETERS);
 
         return false;
     }

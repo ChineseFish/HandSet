@@ -3,7 +3,7 @@ var exec = require('cordova/exec');
 module.exports = {
 
     /**
-     * Send a payment request
+     * Send a tts request
      *
      * @example
      * <code>
