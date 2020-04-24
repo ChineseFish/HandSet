@@ -3,21 +3,21 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
     xmlns:rim="http://www.blackberry.com/ns/widgets"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    id="cordova-plugin-tts"
+    id="cordova-plugin-interval"
     version="0.0.1">
 
-    <name>tts</name>
-    <description>A cordova plugin, a JS version of tts SDK</description>
+    <name>interval</name>
+    <description>A cordova plugin, a JS version of interval SDK</description>
     <author>18605807725</author>
     <license>MIT</license>
-    <keywords>cordova,tts</keywords>
+    <keywords>cordova,interval</keywords>
     <repo></repo>
     <issue></issue>
 
 
     <!-- js module-->
-    <js-module src="www/tts.js" name="tts">
-        <clobbers target="tts" />
+    <js-module src="www/interval.js" name="interval">
+        <clobbers target="interval" />
     </js-module>
 
     <!-- ios -->
@@ -33,12 +33,14 @@
         <hook type="before_plugin_uninstall" src="scripts/android-install.js" />
 
         <config-file target="res/xml/config.xml" parent="/*">
-            <feature name="tts">
-                <param name="android-package" value="gtzn.cordova.tts.CDVTts"/>
+            <feature name="interval">
+                <param name="android-package" value="gtzn.cordova.interval.CDVInterval"/>
                 <param name="onload" value="true" />
             </feature>
         </config-file>
 
-        <source-file src="src/android/CDVTts.java" target-dir="gtzn/cordova/tts" />
+        <source-file src="src/android/CDVInterval.java" target-dir="gtzn/cordova/interval" />
+        <source-file src="src/android/ScanThread.java" target-dir="gtzn/cordova/interval" />
+        <source-file src="src/android/Tts.java" target-dir="gtzn/cordova/interval" />
     </platform>
 </plugin>

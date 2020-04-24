@@ -21,7 +21,12 @@ export default {
         // add device ready event
         document.addEventListener("deviceready", () => {
             
-            
+            //
+            interval.setIndentifier("test", function() {
+                console.log("setIndentifier success");
+            }, function() {
+                console.log("setIndentifier failed");
+            })
 
         }, false);
     },

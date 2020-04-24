@@ -15,6 +15,7 @@
     "cordova-ios": "^5.1.1",
     "cordova-plugin-bridge": "file:../plugins_cordova/cordova-plugin-bridge",
     "cordova-plugin-tts": "file:../plugins_cordova/cordova-plugin-tts",
+    "cordova-plugin-interval": "file:../plugins_cordova/cordova-plugin-interval",
     "cordova-plugin-device": "^2.0.3",
     "cordova-plugin-splashscreen": "^5.0.3",
     "device": "^0.3.10",
@@ -29,7 +30,8 @@
       "cordova-plugin-device": {},
       "cordova-plugin-splashscreen": {},
       "cordova-plugin-bridge": {},
-      "cordova-plugin-tts": {}
+      "cordova-plugin-tts": {},
+      "cordova-plugin-interval": {}
     },
     "platforms": [
       "ios",
