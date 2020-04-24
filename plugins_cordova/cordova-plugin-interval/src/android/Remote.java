@@ -28,19 +28,19 @@ public class Remote {
                 URL url;
                 HttpURLConnection connection = null;
 
-
-                //
-                getBusIdentifierIndex(busIdentifier);
-
-                //
-                writeBusIdentifierIndex(busIdentifier, "123");
-
                 //
                 String index = getBusIdentifierIndex(busIdentifier);
 
                 //
                 try {
-                    url = new URL(remoteUrl + "/ShipList.php?startPort=AJ&&busIdentifier=" + busIdentifier + "&index=" + index);
+
+                    String requestUrl = remoteUrl + "/ShipList.php?startPort=AJ&&busIdentifier=" + busIdentifier + "&index=" + index;
+
+                    // test
+                    Log.d("requestUrl", requestUrl);
+
+                    //
+                    url = new URL(requestUrl);
                     connection = (HttpURLConnection) url.openConnection();
                     connection.setRequestMethod("GET");
                     connection.setConnectTimeout(3000);
@@ -54,12 +54,18 @@ public class Remote {
                     while ((line = reader.readLine()) != null) {
                         response.append(line);
                     }
-                    System.out.println("response=" + response.toString());
+
+                    // test
+                    Log.d("response", response.toString());
 
                     // translate to JSON format
                     JSONObject jsonObject = new JSONObject(response.toString());
 
-                    //
+                    // update index
+                    int newIndex = Integer.parseInt(index) + 1;
+                    writeBusIdentifierIndex(busIdentifier, Integer.toString(newIndex));
+
+                    // alarm begin
                     tts.textToSpeech("你好");
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
