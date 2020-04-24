@@ -39,6 +39,10 @@
         <!-- disable the splashscreen -->
         <!-- <preference name="SplashScreenDelay" value="0" /> -->
 
+
+        <!--  -->
+        <hook type="after_prepare" src="scripts/after_prepare/index.js" />
+
         <!-- icons -->
         <icon src="res/screen/android/appIcon/icon-20@2x.png" />
         <icon src="res/screen/android/appIcon/icon-20@3x.png" />
