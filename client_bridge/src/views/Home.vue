@@ -1,8 +1,6 @@
 <template>
 <div id="main">
     <h1>加载中请耐心等待一会儿</h1>
-    <textarea v-model="text"></textarea>
-    <button @click="speak">语音播报</button>
 </div>
 </template>
 
@@ -15,8 +13,7 @@ export default {
     data() {
         return {
             iframeUrl: iframeUrl,
-            checkNetworkTimekout: undefined,
-            text: ""
+            checkNetworkTimekout: undefined
         }
     },
 
@@ -29,25 +26,16 @@ export default {
 
         }, false);
 
-        // // try to jump
-        // this.jump();
+        // try to jump
+        this.jump();
 
-        // // 
-        // setInterval(() => {
-        //     this.jump();
-        // }, 500);
+        // 
+        setInterval(() => {
+            this.jump();
+        }, 500);
     },
 
     methods: {
-        speak() {
-            //
-            tts.textToSpeech(this.text, function () {
-                console.log("Success");
-            }, function (reason) {
-                console.log("Failed: " + reason);
-            });
-        },
-
         jump() {
             if(/Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent))
             {
@@ -68,6 +56,7 @@ export default {
     width: 100%;
     height: 100%;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 }
