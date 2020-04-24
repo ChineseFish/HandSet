@@ -96,7 +96,7 @@ public class Remote {
     // 读数据
     static public String getBusIdentifierIndex(String identifier) {
         //
-        String info = MainActivity.getSharedPreferences().getString(identifier, "");
+        String info = MainActivity.getSharedPreferences().getString(identifier, "0");
 
         Log.d("getBusIdentifierIndex", info);
 

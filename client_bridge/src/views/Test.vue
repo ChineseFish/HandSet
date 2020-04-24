@@ -2,6 +2,8 @@
 <div id="main">
     <textarea v-model="text"></textarea>
     <button @click="speak">语音播报</button>
+    <textarea v-model="identifier"></textarea>
+    <button @click="setIndentifier">设置汽车车牌</button>
 </div>
 </template>
 
@@ -12,7 +14,8 @@ export default {
     name: 'Main',
     data() {
         return {
-            text: ""
+            text: "",
+            identifier: ""
         }
     },
 
@@ -20,13 +23,6 @@ export default {
     {
         // add device ready event
         document.addEventListener("deviceready", () => {
-            
-            //
-            interval.setIndentifier("test", function() {
-                console.log("setIndentifier success");
-            }, function() {
-                console.log("setIndentifier failed");
-            })
 
         }, false);
     },
@@ -39,6 +35,15 @@ export default {
             }, function (reason) {
                 console.log("Failed: " + reason);
             });
+        },
+
+        setIndentifier() {
+             //
+            interval.setIndentifier(this.identifier, function() {
+                console.log("setIndentifier success");
+            }, function() {
+                console.log("setIndentifier failed");
+            })
         }
     }
 }

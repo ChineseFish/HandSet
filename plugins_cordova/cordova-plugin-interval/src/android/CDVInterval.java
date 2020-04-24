@@ -96,6 +96,8 @@ public class CDVInterval extends CordovaPlugin {
         //
         if(scanThread != null)
         {
+            callbackContext.success();
+            
             Log.d("setIndentifier", "scanThread has begun");
             
             return true;
