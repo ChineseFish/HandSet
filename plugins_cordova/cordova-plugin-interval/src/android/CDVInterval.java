@@ -38,16 +38,17 @@ public class CDVInterval extends CordovaPlugin {
     public static final String ERROR_INVALID_PARAMETERS = "参数格式错误";
     public static final String ERROR_INIT_THREAD = "初始化线程失败";
 
-    private String identifier = "";
-    private ScanThread scanThread;
+    private static String identifier = "";
+    private ScanThread scanThread = null;
 
     @SuppressLint("HandlerLeak")
     private Handler scanHandler = new Handler()
     {
         public void handleMessage(Message msg) {
-            Log.d("scanHandler", "aaaaaaaaaa");
-        }
+            Log.d("scanHandler", "begin to work");
 
+            Remote.fetchPayInfo(CDVInterval.identifier);
+        }
     };
     
     // Used when instantiated via reflection by PluginManager
@@ -90,7 +91,15 @@ public class CDVInterval extends CordovaPlugin {
         Log.d(TAG, "setIndentifier begin");
         
         //
-        identifier = text;
+        CDVInterval.identifier = text;
+
+        //
+        if(scanThread != null)
+        {
+            Log.d("setIndentifier", "scanThread has begun");
+            
+            return true;
+        }
 
         //
         try

@@ -41,6 +41,5 @@
 
         <source-file src="src/android/CDVInterval.java" target-dir="gtzn/cordova/interval" />
         <source-file src="src/android/ScanThread.java" target-dir="gtzn/cordova/interval" />
-        <source-file src="src/android/Tts.java" target-dir="gtzn/cordova/interval" />
     </platform>
 </plugin>

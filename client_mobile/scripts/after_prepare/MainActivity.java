@@ -19,6 +19,7 @@
 
 package __PACKAGE_NAME__;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -34,9 +35,12 @@ public class MainActivity extends CordovaActivity
     public static MainActivity getMainActivity() {
         return mainActivity;
     }
-
-
+    public static SharedPreferences getSharedPreferences() {
+        return mainActivity.mSp;
+    }
     private static MainActivity mainActivity;
+
+    public SharedPreferences mSp;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -48,6 +52,9 @@ public class MainActivity extends CordovaActivity
         if (extras != null && extras.getBoolean("cdvStartInBackground", false)) {
             moveTaskToBack(true);
         }
+
+        //
+        mSp = getSharedPreferences("gtzn", MODE_PRIVATE);
 
         //
         if(appView == null)

@@ -3,7 +3,7 @@ package gtzn.cordova.interval;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
 
-import com.tongda.putuoshanlvyoubashi.MainActivity;
+import __PACKAGE_NAME__.MainActivity;
 
 import java.util.Locale;
 
