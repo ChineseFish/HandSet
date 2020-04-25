@@ -3,13 +3,7 @@ const mockServerClientInstance = process["mockServerClientInstance"];
 mockServerClientInstance.mockAnyResponse({
   httpRequest: {
     "method": "GET",
-    "path": "/payInfo",
-    'queryStringParameters': [
-        {
-            'index': 'test',
-            'values': [ 'true' ]
-        }
-    ],
+    "path": "/payInfo"
   },
   "httpResponse": {
     "headers": {
@@ -17,8 +11,8 @@ mockServerClientInstance.mockAnyResponse({
       "Last-Modified": ["Fri, 23 Oct 2019 07:28:00 GMT"],
     },
     "body": {
-        "index": 1,
-        "text": 2
+        "index": "100",
+        "text": "Hello World"
     }
   }
 }).then(() => {

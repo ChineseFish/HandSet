@@ -62,10 +62,10 @@ public class Remote {
                     JSONObject jsonObject = new JSONObject(response.toString());
 
                     // update index
-                    writeBusIdentifierIndex(busIdentifier, jsonObject.index);
+                    writeBusIdentifierIndex(busIdentifier, jsonObject.getString("index"));
 
                     // alarm begin
-                    tts.textToSpeech(jsonObject.text);
+                    tts.textToSpeech(jsonObject.getString("text"));
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 } catch (IOException | JSONException e) {
