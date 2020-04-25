@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "mockserver-client": "^5.10.0"
+  }
+}

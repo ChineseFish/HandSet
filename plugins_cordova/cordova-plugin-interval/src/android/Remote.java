@@ -18,7 +18,7 @@ import __PACKAGE_NAME__.MainActivity;
 
 public class Remote {
     static private Tts tts = new Tts();
-    static private String remoteUrl = "http://testaj.ziubao.com/AoJiang";
+    static private String remoteUrl = "http://localhost:8080/payInfo?";
 
     static public void fetchPayInfo(String busIdentifier)
     {
@@ -34,7 +34,7 @@ public class Remote {
                 //
                 try {
 
-                    String requestUrl = remoteUrl + "/ShipList.php?startPort=AJ&&busIdentifier=" + busIdentifier + "&index=" + index;
+                    String requestUrl = remoteUrl + "busIdentifier=" + busIdentifier + "&index=" + index;
 
                     // test
                     Log.d("requestUrl", requestUrl);
@@ -62,11 +62,10 @@ public class Remote {
                     JSONObject jsonObject = new JSONObject(response.toString());
 
                     // update index
-                    int newIndex = Integer.parseInt(index) + 1;
-                    writeBusIdentifierIndex(busIdentifier, Integer.toString(newIndex));
+                    writeBusIdentifierIndex(busIdentifier, jsonObject.index);
 
                     // alarm begin
-                    tts.textToSpeech("你好");
+                    tts.textToSpeech(jsonObject.text);
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 } catch (IOException | JSONException e) {
