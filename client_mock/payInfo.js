@@ -3,7 +3,11 @@ const mockServerClientInstance = process["mockServerClientInstance"];
 mockServerClientInstance.mockAnyResponse({
   httpRequest: {
     "method": "GET",
-    "path": "/payInfo"
+    "path": "/payInfo",
+    "queryStringParameters": {
+      "busIdentifier": [".*"],
+      "index": [".*"]
+    }
   },
   "httpResponse": {
     "headers": {
@@ -16,7 +20,7 @@ mockServerClientInstance.mockAnyResponse({
     }
   }
 }).then(() => {
-  console.log("busTicketList expectation created");
+  console.log("payInfo expectation created");
 }).catch(e => {
   console.log(e);
 });
