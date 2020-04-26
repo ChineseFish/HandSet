@@ -18,7 +18,7 @@ import __PACKAGE_NAME__.MainActivity;
 
 public class Remote {
     static private Tts tts = new Tts();
-    static private String remoteUrl = "http://localhost:8080/payInfo?";
+    static private String remoteUrl = "http://mg.zhoulvkeche.com/ashx/GetPlayVoice.ashx?";
 
     static public void fetchPayInfo(String busIdentifier)
     {
@@ -65,7 +65,11 @@ public class Remote {
                     writeBusIdentifierIndex(busIdentifier, jsonObject.getString("index"));
 
                     // alarm begin
-                    tts.textToSpeech(jsonObject.getString("text"));
+                    String speechText = jsonObject.getString("text");
+                    if(speechText.length() > 0)
+                    {
+                        tts.textToSpeech(speechText);
+                    }
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 } catch (IOException | JSONException e) {
