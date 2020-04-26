@@ -20,10 +20,18 @@
 package __PACKAGE_NAME__;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.PowerManager;
+import android.provider.Settings;
 import android.util.Log;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
@@ -79,6 +87,13 @@ public class MainActivity extends CordovaActivity
         // add js interface
         webView.addJavascriptInterface(this, "zsgtzn");
 
+        //
+        if(!isIgnoringBatteryOptimizations())
+        {
+            //
+            requestIgnoreBatteryOptimizations();
+        }
+
         // Set by <content src="index.html" /> in config.xml
         loadUrl(launchUrl);
     }
@@ -120,5 +135,63 @@ public class MainActivity extends CordovaActivity
 
         //
         scanThread.start();
+    }
+
+    @TargetApi(Build.VERSION_CODES.M)
+    private boolean isIgnoringBatteryOptimizations() {
+        boolean isIgnoring = false;
+        PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        if (powerManager != null) {
+            isIgnoring = powerManager.isIgnoringBatteryOptimizations(getPackageName());
+        }
+        return isIgnoring;
+    }
+
+    public void requestIgnoreBatteryOptimizations() {
+        try {
+            Intent intent = new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+            intent.setData(Uri.parse("package:" + getPackageName()));
+            startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 跳转到指定应用的首页
+     */
+    private void showActivity(String packageName) {
+        Intent intent = getPackageManager().getLaunchIntentForPackage(packageName);
+        startActivity(intent);
+    }
+
+    /**
+     * 跳转到指定应用的指定页面
+     */
+    private void showActivity(String packageName, String activityDir) {
+        Intent intent = new Intent();
+        intent.setComponent(new ComponentName(packageName, activityDir));
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
+    public static boolean isOPPO() {
+        return Build.BRAND != null && Build.BRAND.toLowerCase().equals("oppo");
+    }
+
+    private void goOPPOSetting() {
+        try {
+            showActivity("com.coloros.phonemanager");
+        } catch (Exception e1) {
+            try {
+                showActivity("com.oppo.safe");
+            } catch (Exception e2) {
+                try {
+                    showActivity("com.coloros.oppoguardelf");
+                } catch (Exception e3) {
+                    showActivity("com.coloros.safecenter");
+                }
+            }
+        }
     }
 }
