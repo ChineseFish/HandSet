@@ -62,11 +62,12 @@ public class Remote {
                     JSONObject jsonObject = new JSONObject(response.toString());
 
                     // update index
-                    writeBusIdentifierIndex(busIdentifier, jsonObject.getString("index"));
+                    String newIndex = jsonObject.getString("index");
+                    writeBusIdentifierIndex(busIdentifier, newIndex);
 
                     // alarm begin
                     String speechText = jsonObject.getString("text");
-                    if(speechText.length() > 0)
+                    if(speechText.length() > 0 && !newIndex.equals(index))
                     {
                         tts.textToSpeech(speechText);
                     }
