@@ -75,6 +75,8 @@ public class MainActivity extends CordovaActivity
         WebSettings settings = webView.getSettings();
         settings.setLoadWithOverviewMode(true);
         settings.setUseWideViewPort(true);
+
+        // add js interface
         webView.addJavascriptInterface(this, "zsgtzn");
 
         // Set by <content src="index.html" /> in config.xml
