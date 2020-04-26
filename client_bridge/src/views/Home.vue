@@ -1,6 +1,6 @@
 <template>
 <div id="main">
-    <h1>加载中请耐心等待一会儿</h1>
+    
 </div>
 </template>
 

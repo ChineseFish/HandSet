@@ -12,7 +12,7 @@ public class ScanThread extends Thread {
 
     private Handler handler;
 
-    public final static int INTERVAL = 2000;
+    public final static int INTERVAL = 10000;
 
     /**
      * if throw exception, serialport initialize fail.
