@@ -134,6 +134,9 @@ public class MainActivity extends CordovaActivity
 
             //
             scanThread = null;
+
+            //
+            Remote.reset();
         }
     }
 
