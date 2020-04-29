@@ -39,16 +39,12 @@ mockServerClientInstance.mockAnyResponse({
     },
     "body": [
       {
-        "index": "2",
+        "index": "7",
         "text": "a2"
       },
       {
-        "index": "3",
+        "index": "8",
         "text": "a3"
-      },
-      {
-        "index": "4",
-        "text": "a4"
       }
     ]
   }

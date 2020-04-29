@@ -128,10 +128,13 @@ public class MainActivity extends CordovaActivity
 
     @JavascriptInterface
     public void speechGODestroy() {
-        scanThread.interrupt();
-        
         //
-        scanThread = null;
+        if(scanThread != null) {
+            scanThread.interrupt();
+
+            //
+            scanThread = null;
+        }
     }
 
     @JavascriptInterface

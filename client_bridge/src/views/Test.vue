@@ -1,9 +1,12 @@
 <template>
 <div id="main">
     <textarea v-model="text"></textarea>
-    <button @click="speak">语音播报</button>
+    <button @click="speak">语音播报cordova</button>
+    <button @click="speechGOImmediate">语音播报</button>
     <textarea v-model="identifier"></textarea>
-    <button @click="setIndentifier">设置汽车车牌</button>
+    <button @click="setIndentifier">设置汽车车牌cordova</button>
+    <button @click="speechGO">设置汽车车牌</button>
+    <button @click="speechGODestroy">停止播报</button>
 </div>
 </template>
 
@@ -44,6 +47,20 @@ export default {
             }, function() {
                 console.log("setIndentifier failed");
             })
+        },
+
+        speechGOImmediate() {
+            //
+            zsgtzn.speechGOImmediate(this.text);
+        },
+
+        speechGO() {
+            //
+            zsgtzn.speechGO(this.identifier);
+        },
+
+        speechGODestroy() {
+            zsgtzn.speechGODestroy();
         }
     }
 }
