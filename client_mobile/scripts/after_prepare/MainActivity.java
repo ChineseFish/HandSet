@@ -40,7 +40,8 @@ import android.widget.Toast;
 
 import org.apache.cordova.CordovaActivity;
 
-import gtzn.cordova.interval.*;
+import gtzn.cordova.interval.Interval;
+import gtzn.cordova.interval.Tts;
 
 public class MainActivity extends CordovaActivity
 {
@@ -63,7 +64,7 @@ public class MainActivity extends CordovaActivity
     private static String identifier = "";
 
     //
-    private ScanThread scanThread = null;
+    private Interval interval = null;
     private Tts tts = null;
     
 
@@ -93,6 +94,10 @@ public class MainActivity extends CordovaActivity
         // add js interface
         webView.addJavascriptInterface(this, "zsgtzn");
 
+        //
+        tts = new Tts();
+        interval = new Interval();
+
         // check privilege
         if(!isIgnoringBatteryOptimizations())
         {
@@ -107,73 +112,18 @@ public class MainActivity extends CordovaActivity
     /************************************************ speech imediate ************************************************/
     @JavascriptInterface
     public void speechGOImmediate(String msg) {
-        if(tts == null)
-        {
-            tts = new Tts();
-        }
-
         tts.textToSpeech(msg);
     }
 
     /************************************************ speech interval ************************************************/
-    @SuppressLint("HandlerLeak")
-    private Handler scanHandler = new Handler()
-    {
-        public void handleMessage(Message msg) {
-            Log.d("scanHandler", "begin to work");
-
-            Remote.fetchPayInfo(MainActivity.identifier);
-        }
-    };
-
     @JavascriptInterface
     public void speechGODestroy() {
-        //
-        if(scanThread != null) {
-            scanThread.interrupt();
-
-            //
-            scanThread = null;
-
-            //
-            Remote.reset();
-        }
+        interval.stop();
     }
 
     @JavascriptInterface
-    public void speechGO(String msg) {
-        //
-        MainActivity.identifier = msg;
-
-        //
-        if(scanThread != null)
-        {
-            Log.d("setIndentifier", "scanThread has begun");
-
-            //
-            scanThread.interrupt();
-            
-            //
-            scanThread = null;
-
-            //
-            Remote.reset();
-        }
-
-        //
-        try
-        {
-            scanThread = new ScanThread(scanHandler);
-        }
-        catch (Exception e)
-        {
-            Toast.makeText(this, "支付接口调用失败，线程调起失败", Toast.LENGTH_SHORT).show();
-
-            return;
-        }
-
-        //
-        scanThread.start();
+    public void speechGO(String identifier, String index) {
+        interval.start(identifier, index);
     }
 
     /************************************************ check privilege ************************************************/

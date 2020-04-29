@@ -25,9 +25,6 @@ import org.apache.cordova.CordovaPlugin;
 
 import org.json.JSONException;
 
-import android.annotation.SuppressLint;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 
 
@@ -38,23 +35,13 @@ public class CDVInterval extends CordovaPlugin {
     public static final String ERROR_INVALID_PARAMETERS = "参数格式错误";
     public static final String ERROR_INIT_THREAD = "初始化线程失败";
 
-    private static String identifier = "";
-    private ScanThread scanThread = null;
+    private Interval interval;
 
-    @SuppressLint("HandlerLeak")
-    private Handler scanHandler = new Handler()
-    {
-        public void handleMessage(Message msg) {
-            Log.d("scanHandler", "begin to work");
-
-            //
-            Remote.fetchPayInfo(CDVInterval.identifier);
-        }
-    };
+    
     
     // Used when instantiated via reflection by PluginManager
     public CDVInterval() {
-        
+        interval = new Interval();
     }
     
     @Override
@@ -87,43 +74,21 @@ public class CDVInterval extends CordovaPlugin {
         Log.d(TAG, "plugin initialized.");
     }
 
-    protected boolean setIndentifier(String text, CallbackContext callbackContext)
+    protected boolean setIndentifier(String identifier, String index, CallbackContext callbackContext)
     {
         Log.d(TAG, "setIndentifier begin");
-        
-        //
-        CDVInterval.identifier = text;
 
         //
-        if(scanThread != null)
+        if(interval.start(identifier, index))
         {
-            scanThread.interrupt();
-            
-            //
-            scanThread = null;
+            callbackContext.success();
 
-            //
-            Remote.reset();
+            return true;
         }
 
         //
-        try
-        {
-            scanThread = new ScanThread(scanHandler);
-        }
-        catch (Exception e)
-        {
-            callbackContext.error(ERROR_INIT_THREAD);
+        callbackContext.error(ERROR_INIT_THREAD);
 
-            return false;
-            
-        } 
-        scanThread.start();
-
-        //
-        callbackContext.success();
-
-        //
-        return true;
+        return false;
     }
 }

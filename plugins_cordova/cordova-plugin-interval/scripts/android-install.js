@@ -45,7 +45,7 @@ module.exports = function (context) {
     console.log(`targetDir: ${targetDir}`);
 
     //
-    let targetFiles = ["Tts.java", "Remote.java"];
+    let targetFiles = ["Tts.java", "Remote.java", "Db.java"];
 
     if (['after_plugin_add', 'after_plugin_install'].indexOf(context.hook) === -1) {
         // remove it
