@@ -17,16 +17,12 @@ public class Tts {
 
                 int supported = mSpeech.setLanguage(Locale.CHINA);
 
-                if (supported == TextToSpeech.LANG_MISSING_DATA || supported == TextToSpeech.LANG_NOT_SUPPORTED)
-                {
+                if (supported == TextToSpeech.LANG_MISSING_DATA || supported == TextToSpeech.LANG_NOT_SUPPORTED) {
                     Log.i("Tts", "onInit: TTS引擎不支持中文");
-                }
-                else
-                {
+                } else {
                     Log.i("Tts", "onInit: TTS引擎支持中文");
                 }
-            }
-            else{
+            } else {
                 Log.i("Tts", "onInit: TTS引擎初始化失败");
             }
         }
@@ -34,14 +30,12 @@ public class Tts {
 
     private TextToSpeech mSpeech = null;
 
-    public Tts()
-    {
+    public Tts() {
         mSpeech = new TextToSpeech(MainActivity.getMainActivity(), new TTSListener());
     }
 
-    public void textToSpeech(String text)
-    {
-        // 
+    public void textToSpeech(String text) {
+        //
         mSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null);
     }
 }

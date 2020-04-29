@@ -43,34 +43,34 @@ import org.apache.cordova.CordovaActivity;
 import gtzn.cordova.interval.Interval;
 import gtzn.cordova.interval.Tts;
 
-public class MainActivity extends CordovaActivity
-{
+public class MainActivity extends CordovaActivity {
     //
     private static MainActivity mainActivity;
+
     public MainActivity() {
         mainActivity = this;
     }
+
     public static MainActivity getMainActivity() {
         return mainActivity;
     }
 
     //
     public SharedPreferences mSp;
+
     public static SharedPreferences getSharedPreferences() {
         return mainActivity.mSp;
     }
-    
+
     //
     private static String identifier = "";
 
     //
     private Interval interval = null;
     private Tts tts = null;
-    
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // enable Cordova apps to be started in the background
@@ -83,10 +83,10 @@ public class MainActivity extends CordovaActivity
         mSp = getSharedPreferences("gtzn", MODE_PRIVATE);
 
         //
-        if(appView == null)
+        if (appView == null)
             init();
 
-        WebView webView = (WebView)appView.getView();
+        WebView webView = (WebView) appView.getView();
         WebSettings settings = webView.getSettings();
         settings.setLoadWithOverviewMode(true);
         settings.setUseWideViewPort(true);
@@ -99,8 +99,7 @@ public class MainActivity extends CordovaActivity
         interval = new Interval();
 
         // check privilege
-        if(!isIgnoringBatteryOptimizations())
-        {
+        if (!isIgnoringBatteryOptimizations()) {
             //
             requestIgnoreBatteryOptimizations();
         }
@@ -109,13 +108,17 @@ public class MainActivity extends CordovaActivity
         loadUrl(launchUrl);
     }
 
-    /************************************************ speech imediate ************************************************/
+    /************************************************
+     * speech imediate
+     ************************************************/
     @JavascriptInterface
     public void speechGOImmediate(String msg) {
         tts.textToSpeech(msg);
     }
 
-    /************************************************ speech interval ************************************************/
+    /************************************************
+     * speech interval
+     ************************************************/
     @JavascriptInterface
     public void speechGODestroy() {
         interval.stop();
@@ -126,7 +129,9 @@ public class MainActivity extends CordovaActivity
         interval.start(identifier, index);
     }
 
-    /************************************************ check privilege ************************************************/
+    /************************************************
+     * check privilege
+     ************************************************/
     @TargetApi(Build.VERSION_CODES.M)
     private boolean isIgnoringBatteryOptimizations() {
         boolean isIgnoring = false;

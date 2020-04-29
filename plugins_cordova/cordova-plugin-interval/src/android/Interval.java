@@ -8,80 +8,72 @@ import android.util.Log;
 import java.util.concurrent.locks;
 
 class Interval {
-  private ScanThread scanThread = null;
-  private String identifier = null;
-  private Remote remote = null;
-  private Lock remoteLock = new Lock();
+    private ScanThread scanThread = null;
+    private String identifier = null;
+    private Remote remote = null;
+    private Lock remoteLock = new Lock();
 
-  public Interval() {
+    public Interval() {
 
-  }
+    }
 
-  @SuppressLint("HandlerLeak")
-  private Handler scanHandler = new Handler()
-  {
-      public void handleMessage(Message msg) {
-          Log.d("Interval","scanHandler begin to work");
+    @SuppressLint("HandlerLeak")
+    private Handler scanHandler = new Handler() {
+        public void handleMessage(Message msg) {
+            Log.d("Interval", "scanHandler begin to work");
 
-          //
-          remoteLock.lock();
+            //
+            remoteLock.lock();
 
-          remote.fetchPayInfo(identifier);
+            remote.fetchPayInfo(identifier);
 
-          remoteLock.lock().unlock();
+            remoteLock.lock().unlock();
         }
-      };
+    };
 
-  public boolean start(String identifier, String index)
-  {
-      Log.d("Interval", "start, begin");
-    
-      //
-      remoteLock.lock();
+    public boolean start(String identifier, String index) {
+        Log.d("Interval", "start, begin");
 
-      if(remote != null)
-        {
+        //
+        remoteLock.lock();
+
+        if (remote != null) {
             remote.stop();
         }
         //
         remote = new Remote();
 
         remoteLock.unlock();
-        
-      // change idendifier
-      this.identifier = identifier;
 
-      // init index of idendifier
-      // notice if repeated start with identical identifier, 
-      // will result in a competition situation, occur repeat speech, 
-      Db.writeBusIdentifierIndex(identifier, index);
+        // change idendifier
+        this.identifier = identifier;
 
-      // check scanThread
-      if(scanThread != null)
-      {
-        Log.d("Interval", "start, thread has begun");
+        // init index of idendifier
+        // notice if repeated start with identical identifier,
+        // will result in a competition situation, occur repeat speech,
+        Db.writeBusIdentifierIndex(identifier, index);
+
+        // check scanThread
+        if (scanThread != null) {
+            Log.d("Interval", "start, thread has begun");
+
+            //
+            return true;
+        }
+
+        //
+        try {
+            scanThread = new ScanThread(scanHandler);
+        } catch (Exception e) {
+            return false;
+        }
+        scanThread.start();
 
         //
         return true;
-      }
+    }
 
-      //
-      try
-      {
-        scanThread = new ScanThread(scanHandler);
-      }
-      catch (Exception e)
-      {
-        return false; 
-      } 
-      scanThread.start();
-
-
-      //
-      return true;
-  }
-
-  public void stop() {
-    scanThread.interrupt();
-  }
+    public void stop() {
+        scanThread.interrupt();
+    }
 }

@@ -5,7 +5,6 @@ import java.io.IOException;
 import android.os.Handler;
 import android.os.Message;
 
-
 public class ScanThread extends Thread {
 
     private static String TAG = ScanThread.class.getSimpleName();
@@ -22,7 +21,7 @@ public class ScanThread extends Thread {
      */
     public ScanThread(Handler handler) throws SecurityException, IOException {
         this.handler = handler;
-        
+
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
@@ -41,10 +40,10 @@ public class ScanThread extends Thread {
 
                 handler.sendMessage(msg);
 
-                Thread.sleep(INTERVAL);    
+                Thread.sleep(INTERVAL);
             }
         } catch (Exception e) {
-            
+
             e.printStackTrace();
         }
     }

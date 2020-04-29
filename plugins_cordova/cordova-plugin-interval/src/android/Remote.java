@@ -23,12 +23,13 @@ public class Remote {
     private Tts tts;
     private String remoteUrl;
     private Boolean ifStop;
+
     //
     public Remote() {
         tts = new Tts();
 
         //
-        //  remoteUrl = "http://mg.zhoulvkeche.com";
+        // remoteUrl = "http://mg.zhoulvkeche.com";
         remoteUrl = "http://192.168.11.175:3000";
 
         //
@@ -36,8 +37,7 @@ public class Remote {
     }
 
     //
-    public void fetchPayInfo(String busIdentifier)
-    {
+    public void fetchPayInfo(String busIdentifier) {
         Thread thread = new Thread() {
             @Override
             public void run() {
@@ -50,7 +50,8 @@ public class Remote {
                 //
                 try {
 
-                    String requestUrl = remoteUrl + "/ashx/GetPlayVoice.ashx?busIdentifier=" + busIdentifier + "&index=" + index;
+                    String requestUrl = remoteUrl + "/ashx/GetPlayVoice.ashx?busIdentifier=" + busIdentifier + "&index="
+                            + index;
 
                     // test
                     Log.d("fetchPayInfo requestUrl", requestUrl);
@@ -76,8 +77,7 @@ public class Remote {
 
                     // translate to JSON format
                     JSONArray speechTextList = new JSONArray(response.toString());
-                    if(speechTextList.length() <= 0)
-                    {
+                    if (speechTextList.length() <= 0) {
                         return;
                     }
 
@@ -88,8 +88,7 @@ public class Remote {
 
                     // fetch speech text
                     String speechText = "";
-                    for(int i = 0; i < speechTextList.length(); i++)
-                    {
+                    for (int i = 0; i < speechTextList.length(); i++) {
                         speechText += speechTextList.getJSONObject(i).getString("text");
                     }
 
@@ -98,10 +97,8 @@ public class Remote {
                     String newIndex = speechTextList.getJSONObject(maxIndex).getString("index");
 
                     // speech
-                    try
-                    {
-                        if(ifStop)
-                        {
+                    try {
+                        if (ifStop) {
                             return;
                         }
 
@@ -110,9 +107,7 @@ public class Remote {
                         // update index
                         Db.writeBusIdentifierIndex(busIdentifier, newIndex);
 
-                    }
-                    catch(Exception e)
-                    {
+                    } catch (Exception e) {
                         //
                         e.printStackTrace();
                     }
@@ -131,8 +126,7 @@ public class Remote {
         thread.start();
     }
 
-    public void stopFetchPayInfo() 
-    {
+    public void stopFetchPayInfo() {
         ifStop = true;
     }
 }

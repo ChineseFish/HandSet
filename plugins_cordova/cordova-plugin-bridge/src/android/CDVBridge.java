@@ -38,7 +38,7 @@ public class CDVBridge extends CordovaPlugin {
     public CDVBridge() {
 
     }
-    
+
     @Override
     public boolean execute(String action, CordovaArgs args, CallbackContext callbackContext) throws JSONException {
         Log.d(TAG, String.format("%s is called. Callback ID: %s.", action, callbackContext.getCallbackId()));

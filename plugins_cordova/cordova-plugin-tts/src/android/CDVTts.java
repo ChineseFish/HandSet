@@ -41,7 +41,7 @@ public class CDVTts extends CordovaPlugin {
     public CDVTts() {
 
     }
-    
+
     @Override
     public boolean execute(String action, CordovaArgs args, CallbackContext callbackContext) throws JSONException {
         Log.d(TAG, String.format("%s is called. Callback ID: %s.", action, callbackContext.getCallbackId()));
@@ -49,10 +49,9 @@ public class CDVTts extends CordovaPlugin {
         if (action.equals("textToSpeech")) {
             String text = args.getString(0);
 
-            if(text.length() == 0)
-            {
+            if (text.length() == 0) {
                 callbackContext.error(ERROR_INVALID_PARAMETERS);
-                
+
                 return false;
             }
 
@@ -75,11 +74,10 @@ public class CDVTts extends CordovaPlugin {
         tts = new Tts();
     }
 
-    protected boolean textToSpeech(String text, CallbackContext callbackContext)
-    {
+    protected boolean textToSpeech(String text, CallbackContext callbackContext) {
         Log.d(TAG, "textToSpeech begin");
-      
-        // 
+
+        //
         tts.textToSpeech(text);
 
         //
