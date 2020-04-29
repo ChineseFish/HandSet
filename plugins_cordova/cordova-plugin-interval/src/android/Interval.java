@@ -11,17 +11,17 @@ class Interval {
   private ScanThread scanThread = null;
   private String identifier = null;
   private Remote remote = null;
-    private Lock remoteLock = new Lock();
-  public Interval()
-  {
-    
+  private Lock remoteLock = new Lock();
+
+  public Interval() {
+
   }
 
   @SuppressLint("HandlerLeak")
   private Handler scanHandler = new Handler()
   {
       public void handleMessage(Message msg) {
-          Log.d("Interval", "scanHandler begin to work");
+          Log.d("Interval","scanHandler begin to work");
 
           //
           remoteLock.lock();
@@ -29,10 +29,10 @@ class Interval {
           remote.fetchPayInfo(identifier);
 
           remoteLock.lock().unlock();
-      }
-  };
+        }
+      };
 
-  public boolean start(identifier, index)
+  public boolean start(String identifier, String index)
   {
       Log.d("Interval", "start, begin");
     
@@ -62,7 +62,7 @@ class Interval {
         Log.d("Interval", "start, thread has begun");
 
         //
-        return;
+        return true;
       }
 
       //
@@ -81,8 +81,7 @@ class Interval {
       return true;
   }
 
-  public void stop()
-  {
+  public void stop() {
     scanThread.interrupt();
   }
 }

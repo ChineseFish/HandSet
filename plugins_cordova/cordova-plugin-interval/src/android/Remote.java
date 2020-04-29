@@ -21,7 +21,7 @@ import __PACKAGE_NAME__.MainActivity;
 
 public class Remote {
     private Tts tts;
-    private String remoteUrl
+    private String remoteUrl;
     private Boolean ifStop;
     //
     public Remote() {
