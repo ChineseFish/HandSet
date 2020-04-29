@@ -1,7 +1,7 @@
 const mockServerClient = require('mockserver-client').mockServerClient;
 
 //
-const mockServerClientInstance = process["mockServerClientInstance"] = mockServerClient("localhost", 8080);
+const mockServerClientInstance = process["mockServerClientInstance"] = mockServerClient("localhost", 3000);
 
 //
 mockServerClientInstance.reset();

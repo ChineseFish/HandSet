@@ -44,22 +44,28 @@ import gtzn.cordova.interval.*;
 
 public class MainActivity extends CordovaActivity
 {
+    //
+    private static MainActivity mainActivity;
     public MainActivity() {
         mainActivity = this;
     }
-
     public static MainActivity getMainActivity() {
         return mainActivity;
     }
+
+    //
+    public SharedPreferences mSp;
     public static SharedPreferences getSharedPreferences() {
         return mainActivity.mSp;
     }
-    private static MainActivity mainActivity;
-
+    
+    //
     private static String identifier = "";
-    private ScanThread scanThread = null;
 
-    public SharedPreferences mSp;
+    //
+    private ScanThread scanThread = null;
+    private Tts tts = null;
+    
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -87,7 +93,7 @@ public class MainActivity extends CordovaActivity
         // add js interface
         webView.addJavascriptInterface(this, "zsgtzn");
 
-        //
+        // check privilege
         if(!isIgnoringBatteryOptimizations())
         {
             //
@@ -98,6 +104,18 @@ public class MainActivity extends CordovaActivity
         loadUrl(launchUrl);
     }
 
+    /************************************************ speech imediate ************************************************/
+    @JavascriptInterface
+    public void speechGOImmediate(String msg) {
+        if(tts == null)
+        {
+            tts = new Tts();
+        }
+
+        tts.textToSpeech(msg);
+    }
+
+    /************************************************ speech interval ************************************************/
     @SuppressLint("HandlerLeak")
     private Handler scanHandler = new Handler()
     {
@@ -109,6 +127,14 @@ public class MainActivity extends CordovaActivity
     };
 
     @JavascriptInterface
+    public void speechGODestroy() {
+        scanThread.interrupt();
+        
+        //
+        scanThread = null;
+    }
+
+    @JavascriptInterface
     public void speechGO(String msg) {
         //
         MainActivity.identifier = msg;
@@ -118,7 +144,14 @@ public class MainActivity extends CordovaActivity
         {
             Log.d("setIndentifier", "scanThread has begun");
 
-            return;
+            //
+            scanThread.interrupt();
+            
+            //
+            scanThread = null;
+
+            //
+            Remote.reset();
         }
 
         //
@@ -128,7 +161,7 @@ public class MainActivity extends CordovaActivity
         }
         catch (Exception e)
         {
-            Toast.makeText(this, "支付接口调用失败，线程吊起失败", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "支付接口调用失败，线程调起失败", Toast.LENGTH_SHORT).show();
 
             return;
         }
@@ -137,6 +170,7 @@ public class MainActivity extends CordovaActivity
         scanThread.start();
     }
 
+    /************************************************ check privilege ************************************************/
     @TargetApi(Build.VERSION_CODES.M)
     private boolean isIgnoringBatteryOptimizations() {
         boolean isIgnoring = false;

@@ -6,7 +6,7 @@
         "mobileAndroid": "cd client_mobile && rm -rf platforms/android && rm -rf plugins && cordova prepare android",
         "clearAndroid": "cd client_mobile && rm -rf platforms/android",
         "android": "cd client_mobile && cordova run android",
-        "mockServer": "java -Dmockserver.enableCORSForAllResponses=true -jar \"./client_mock/jar/mockserver-netty-5.10.0-jar-with-dependencies.jar\" -serverPort 8080",
+        "mockServer": "java -Dmockserver.enableCORSForAllResponses=true -jar \"./client_mock/jar/mockserver-netty-5.10.0-jar-with-dependencies.jar\" -serverPort 3000",
         "mockClient": "cd client_mock && node index.js"
     }
 }

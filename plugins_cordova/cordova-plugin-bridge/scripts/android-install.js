@@ -41,7 +41,7 @@ module.exports = function (context) {
     }
 
     //
-    targetDir  = path.join(projectRoot, "platforms", "android", "app", "src", "main", "java", packageName.replace(/\./g, path.sep));
+    targetDir  = path.join(projectRoot, "platforms", "android", "app", "src", "main", "java", "gtzn", "cordova", "bridge");
     console.log(targetDir);
 
     //
@@ -72,7 +72,9 @@ module.exports = function (context) {
                     throw err;
                 }
 
-                data = data.replace(/^package __PACKAGE_NAME__;/m, 'package ' + packageName + ";");
+                data = data.replace(/__PACKAGE_NAME__/m, packageName);
+
+                //
                 fs.writeFileSync(path.join(targetDir, targetFile), data);
             });
         });

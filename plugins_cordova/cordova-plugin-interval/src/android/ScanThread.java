@@ -34,8 +34,9 @@ public class ScanThread extends Thread {
     @Override
     public void run() {
         try {
+            // isInterrupted() will throw an exception when thread call interrupted()
+            // and interrupted mark is set to true
             while (!isInterrupted()) {
-
                 Message msg = new Message();
 
                 handler.sendMessage(msg);

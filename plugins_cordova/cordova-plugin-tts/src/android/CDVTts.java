@@ -28,48 +28,18 @@ import org.apache.cordova.LOG;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.content.Context;
-import android.speech.tts.TextToSpeech;
 import android.util.Log;
 
-import com.tongda.putuoshanlvyoubashi.MainActivity;
-
-import java.util.Locale;
-
 public class CDVTts extends CordovaPlugin {
-    private class TTSListener implements TextToSpeech.OnInitListener {
-        @Override
-        public void onInit(int status) {
-            // TODO Auto-generated method stub
-            if (status == TextToSpeech.SUCCESS) {
-                Log.i("MainActivity", "onInit: TTS引擎初始化成功");
-
-                int supported = mSpeech.setLanguage(Locale.CHINA);
-
-                if (supported == TextToSpeech.LANG_MISSING_DATA || supported == TextToSpeech.LANG_NOT_SUPPORTED)
-                {
-                    Log.i("MainActivity", "onInit: TTS引擎不支持中文");
-                }
-                else
-                {
-                    Log.i("MainActivity", "onInit: TTS引擎支持中文");
-                }
-            }
-            else{
-                Log.i("MainActivity", "onInit: TTS引擎初始化失败");
-            }
-        }
-    }
-
-    private TextToSpeech mSpeech = null;
-
     private static final String TAG = "CDVTts";
 
     public static final String ERROR_INVALID_PARAMETERS = "参数格式错误";
-    
+
+    private Tts tts;
+
     // Used when instantiated via reflection by PluginManager
     public CDVTts() {
-        
+
     }
     
     @Override
@@ -101,7 +71,8 @@ public class CDVTts extends CordovaPlugin {
 
         Log.d(TAG, "plugin initialized.");
 
-        mSpeech = new TextToSpeech(MainActivity.getMainActivity(), new TTSListener());
+        //
+        tts = new Tts();
     }
 
     protected boolean textToSpeech(String text, CallbackContext callbackContext)
@@ -109,7 +80,7 @@ public class CDVTts extends CordovaPlugin {
         Log.d(TAG, "textToSpeech begin");
       
         // 
-        mSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null);
+        tts.textToSpeech(text);
 
         //
         callbackContext.success();

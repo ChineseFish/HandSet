@@ -47,6 +47,7 @@ public class CDVInterval extends CordovaPlugin {
         public void handleMessage(Message msg) {
             Log.d("scanHandler", "begin to work");
 
+            //
             Remote.fetchPayInfo(CDVInterval.identifier);
         }
     };
@@ -96,11 +97,13 @@ public class CDVInterval extends CordovaPlugin {
         //
         if(scanThread != null)
         {
-            callbackContext.success();
+            scanThread.interrupt();
             
-            Log.d("setIndentifier", "scanThread has begun");
-            
-            return true;
+            //
+            scanThread = null;
+
+            //
+            Remote.reset();
         }
 
         //
