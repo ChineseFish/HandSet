@@ -4,6 +4,7 @@
     <button @click="speak">语音播报cordova</button>
     <button @click="speechGOImmediate">语音播报</button>
     <textarea v-model="identifier"></textarea>
+    <textarea v-model="index"></textarea>
     <button @click="setIndentifier">设置汽车车牌cordova</button>
     <button @click="speechGO">设置汽车车牌</button>
     <button @click="speechGODestroy">停止播报</button>
@@ -18,7 +19,8 @@ export default {
     data() {
         return {
             text: "",
-            identifier: ""
+            identifier: "",
+            index: ""
         }
     },
 
@@ -42,7 +44,7 @@ export default {
 
         setIndentifier() {
              //
-            interval.setIndentifier(this.identifier, function() {
+            interval.setIndentifier(this.identifier, this.index, function() {
                 console.log("setIndentifier success");
             }, function() {
                 console.log("setIndentifier failed");
@@ -56,7 +58,7 @@ export default {
 
         speechGO() {
             //
-            zsgtzn.speechGO(this.identifier);
+            zsgtzn.speechGO(this.identifier, this.index);
         },
 
         speechGODestroy() {

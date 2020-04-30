@@ -5,13 +5,14 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
-import java.util.concurrent.locks;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
-class Interval {
+public class Interval {
     private ScanThread scanThread = null;
     private String identifier = null;
     private Remote remote = null;
-    private Lock remoteLock = new Lock();
+    private Lock remoteLock = new ReentrantLock();
 
     public Interval() {
 
@@ -23,11 +24,18 @@ class Interval {
             Log.d("Interval", "scanHandler begin to work");
 
             //
-            remoteLock.lock();
+            try
+            {
+                remoteLock.lock();
 
-            remote.fetchPayInfo(identifier);
+                remote.fetchPayInfo(identifier);
+            } catch (Exception e) {
+                // TODO: handle exception
+            } finally {
+                Log.d("Interval handleMessage", "释放了锁");
 
-            remoteLock.lock().unlock();
+                remoteLock.unlock();
+            }
         }
     };
 
@@ -35,15 +43,28 @@ class Interval {
         Log.d("Interval", "start, begin");
 
         //
-        remoteLock.lock();
+        if(remote != null)
+        {
+            try
+            {
+                //
+                remoteLock.lock();
 
-        if (remote != null) {
-            remote.stop();
+                remote.stopFetchPayInfo();
+
+                remote = new Remote();
+            } catch (Exception e) {
+                // TODO: handle exception
+            } finally {
+                Log.d("Interval handleMessage", "释放了锁");
+
+                remoteLock.unlock();
+            }
         }
-        //
-        remote = new Remote();
-
-        remoteLock.unlock();
+        else
+        {
+            remote = new Remote();
+        }
 
         // change idendifier
         this.identifier = identifier;
@@ -74,6 +95,33 @@ class Interval {
     }
 
     public void stop() {
-        scanThread.interrupt();
+        //
+        if (remote != null) {
+            try
+            {
+                //
+                remoteLock.lock();
+
+                //
+                remote.stopFetchPayInfo();
+
+                //
+                remote = null;
+            } catch (Exception e) {
+                // TODO: handle exception
+            } finally {
+                Log.d("Interval handleMessage", "释放了锁");
+
+                remoteLock.unlock();
+            }
+        }
+        
+        //
+        if(null != scanThread)
+        {
+            scanThread.interrupt();
+
+            scanThread = null;
+        }
     }
 }

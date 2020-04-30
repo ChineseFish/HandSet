@@ -46,15 +46,24 @@ public class CDVInterval extends CordovaPlugin {
         Log.d(TAG, String.format("%s is called. Callback ID: %s.", action, callbackContext.getCallbackId()));
 
         if (action.equals("setIndentifier")) {
-            String text = args.getString(0);
+            String identifier = args.getString(0);
+            String index = args.getString(1);
 
-            if (text.length() == 0) {
+            //
+            if (identifier.length() == 0) {
                 callbackContext.error(ERROR_INVALID_PARAMETERS);
 
                 return false;
             }
 
-            return setIndentifier(text, callbackContext);
+            //
+            if (index.length() == 0) {
+                callbackContext.error(ERROR_INVALID_PARAMETERS);
+
+                return false;
+            }
+
+            return setIndentifier(identifier, index, callbackContext);
         }
 
         callbackContext.error(ERROR_INVALID_PARAMETERS);

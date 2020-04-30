@@ -7,14 +7,14 @@ module.exports = {
      *
      * @example
      * <code>
-     * interval.setIndentifier(identifier, function () {
+     * interval.setIndentifier(identifier, index, function () {
      *     alert("Success");
      * }, function (reason) {
      *     alert("Failed: " + reason);
      * });
      * </code>
      */
-    setIndentifier: function (identifier, onSuccess, onError) {
-        return exec(onSuccess, onError, "interval", "setIndentifier", [identifier]);
+    setIndentifier: function (identifier, index, onSuccess, onError) {
+        return exec(onSuccess, onError, "interval", "setIndentifier", [identifier, index]);
     }
 };
