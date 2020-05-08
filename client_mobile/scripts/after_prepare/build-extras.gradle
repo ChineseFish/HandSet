@@ -1,1 +1,4 @@
 ext.cdvMinSdkVersion = 20
+dependencies {
+    implementation 'com.android.support:support-v4:24.1.1'
+}

@@ -11,17 +11,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-/**
- * class description here
- *
- * @author hua.yin
- * @version 2.0.0
- * @since Aug 12, 2011
- */
 public final class LogUtils {
-    /**
-     * Log中的常量是int值，不适合给外面使用，这里统一用这个枚举值进行设置
-     */
     public enum LogLevel {
         VERBOSE(Log.VERBOSE),
         DEBUG(Log.DEBUG),
@@ -41,22 +31,17 @@ public final class LogUtils {
         }
     }
 
-    private static final int CACHE_QUEUE_SIZE = 10; //缓存最多10条log信息后输出到文件
+    private static final int CACHE_QUEUE_SIZE = 10; // 缓存最多10条log信息后输出到文件
     private static final SimpleDateFormat LOG_DATE_TIME_FORMAT = new SimpleDateFormat("MM-dd HH:mm:ss.SSS");
 
     private static ExecutorService sLogExecutor = Executors.newSingleThreadExecutor();
 
-    private static final String PREFIX = "(YOUR PREFIX):";
+    private static final String PREFIX = "gtzn:";
     private static boolean sLogEnable = true;
     private static LogLevel sLogLevel = LogLevel.DEBUG;
     private static Queue<String> sMsgQueue = new ArrayBlockingQueue<>(CACHE_QUEUE_SIZE);
     private static LogFileManager sLogFileManager;
 
-    /**
-     * 设置Log开关
-     *
-     * @param enable 开关项(默认为开).
-     */
     public static void setEnable(boolean enable) {
         sLogEnable = enable;
     }
@@ -72,7 +57,6 @@ public final class LogUtils {
      */
     public static void setLogDir(String dirPath) {
         File file = new File(dirPath);
-
 
         //
         if (file.exists() && !file.isDirectory()) {

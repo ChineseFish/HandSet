@@ -9,14 +9,9 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-/**
- * @author liye
- * @version 4.1.0
- * @since: 15/11/19 下午2:11
- */
 public class LogFileManager {
-    private static final int LOG_FILES_MAX_NUM = 5; //文件最多有5个
-    private static final int LOG_FILE_MAX_SIZE = 1000 * 1000; //文件最大1MB
+    private static final int LOG_FILES_MAX_NUM = 5; // 文件最多有5个
+    private static final int LOG_FILE_MAX_SIZE = 1000 * 1000; // 文件最大1MB
 
     private static final SimpleDateFormat LOG_FILE_DATE_FORMAT = new SimpleDateFormat("MM-dd-HH-mm");
 
@@ -28,30 +23,36 @@ public class LogFileManager {
     }
 
     public void writeLogToFile(String logMessage) {
+        // if log file not exist or log file is too big, create it
         if (mCurrentLogFile == null || mCurrentLogFile.length() >= LOG_FILE_MAX_SIZE) {
             mCurrentLogFile = getNewLogFile();
         }
+
+        // write to log file
         FileUtils.writeToFile(logMessage, mCurrentLogFile.getPath());
     }
 
     private File getNewLogFile() {
+        // try to fetch log file list
         File dir = new File(mLogFileDir);
         File[] files = dir.listFiles(fileFilter);
         if (files == null || files.length == 0) {
             // 创建新文件
             return createNewLogFile();
         }
+
+        // sort file by modify date, check if log file's amount is too big, if so, delete order log file
         List<File> sortedFiles = sortFiles(files);
         if (files.length > LOG_FILES_MAX_NUM) {
-            // 删掉最老的文件
             FileUtils.delete(sortedFiles.get(0));
         }
-        // 取最新的文件，看写没写满
+
+        // fetch newest file and check if file has been full
         File lastLogFile = sortedFiles.get(sortedFiles.size() - 1);
         if (lastLogFile.length() < LOG_FILE_MAX_SIZE) {
             return lastLogFile;
         } else {
-            // 创建新文件
+            // create new file
             return createNewLogFile();
         }
     }
@@ -78,10 +79,15 @@ public class LogFileManager {
 
     private FileFilter fileFilter = new FileFilter() {
         public boolean accept(File file) {
+            // transfer log file to lower case
             String tmp = file.getName().toLowerCase();
+
+            //
             if (tmp.startsWith("log") && tmp.endsWith(".txt")) {
                 return true;
             }
+
+            //
             return false;
         }
     };

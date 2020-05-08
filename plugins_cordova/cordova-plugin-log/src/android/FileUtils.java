@@ -6,11 +6,6 @@ import android.text.TextUtils;
 import java.io.File;
 import java.io.FileWriter;
 
-/**
- * @author liye
- * @version 4.1.0
- * @since: 16/6/23 下午6:42
- */
 public class FileUtils {
     /**
      * 删除文件或目录
@@ -37,7 +32,7 @@ public class FileUtils {
     }
 
     /**
-     * 创建文件， 如果不存在则创建，否则返回原文件的File对象
+     * 创建文件，如果不存在则创建，否则返回原文件的File对象
      *
      * @param path 文件路径
      * @return 创建好的文件对象, 返回为空表示失败
@@ -47,14 +42,17 @@ public class FileUtils {
             return null;
         }
 
+        // file exist
         File file = new File(path);
         if (file.isFile()) {
             return file;
         }
 
+        // file dir is valid, if dir not exit, just create
         File parentFile = file.getParentFile();
         if (parentFile != null && (parentFile.isDirectory() || parentFile.mkdirs())) {
             try {
+                // create a new file
                 if (file.createNewFile()) {
                     return file;
                 }
