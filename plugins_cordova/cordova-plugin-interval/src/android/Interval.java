@@ -3,10 +3,11 @@ package gtzn.cordova.interval;
 import android.annotation.SuppressLint;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+
+import gtzn.utils.log.LogUtils;
 
 public class Interval {
     private ScanThread scanThread = null;
@@ -21,7 +22,7 @@ public class Interval {
     @SuppressLint("HandlerLeak")
     private Handler scanHandler = new Handler() {
         public void handleMessage(Message msg) {
-            Log.d("Interval", "scanHandler begin to work");
+            LogUtils.d("Interval", "scanHandler begin to work");
 
             //
             try
@@ -32,7 +33,7 @@ public class Interval {
             } catch (Exception e) {
                 // TODO: handle exception
             } finally {
-                Log.d("Interval handleMessage", "释放了锁");
+                LogUtils.d("Interval handleMessage", "释放了锁");
 
                 remoteLock.unlock();
             }
@@ -40,7 +41,7 @@ public class Interval {
     };
 
     public boolean start(String identifier, String index) {
-        Log.d("Interval", "start, begin");
+        LogUtils.d("Interval", "start, begin");
 
         //
         if(remote != null)
@@ -56,7 +57,7 @@ public class Interval {
             } catch (Exception e) {
                 // TODO: handle exception
             } finally {
-                Log.d("Interval handleMessage", "释放了锁");
+                LogUtils.d("Interval handleMessage", "释放了锁");
 
                 remoteLock.unlock();
             }
@@ -76,7 +77,7 @@ public class Interval {
 
         // check scanThread
         if (scanThread != null) {
-            Log.d("Interval", "start, thread has begun");
+            LogUtils.d("Interval", "start, thread has begun");
 
             //
             return true;
@@ -110,7 +111,7 @@ public class Interval {
             } catch (Exception e) {
                 // TODO: handle exception
             } finally {
-                Log.d("Interval handleMessage", "释放了锁");
+                LogUtils.d("Interval handleMessage", "释放了锁");
 
                 remoteLock.unlock();
             }

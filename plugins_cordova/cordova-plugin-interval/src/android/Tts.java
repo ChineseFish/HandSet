@@ -1,11 +1,12 @@
 package gtzn.cordova.interval;
 
 import android.speech.tts.TextToSpeech;
-import android.util.Log;
 
 import __PACKAGE_NAME__.MainActivity;
 
 import java.util.Locale;
+
+import gtzn.utils.log.LogUtils;
 
 public class Tts {
     private class TTSListener implements TextToSpeech.OnInitListener {
@@ -13,17 +14,17 @@ public class Tts {
         public void onInit(int status) {
             // TODO Auto-generated method stub
             if (status == TextToSpeech.SUCCESS) {
-                Log.i("Tts", "onInit: TTS引擎初始化成功");
+                LogUtils.i("Tts", "onInit: TTS引擎初始化成功");
 
                 int supported = mSpeech.setLanguage(Locale.CHINA);
 
                 if (supported == TextToSpeech.LANG_MISSING_DATA || supported == TextToSpeech.LANG_NOT_SUPPORTED) {
-                    Log.i("Tts", "onInit: TTS引擎不支持中文");
+                    LogUtils.i("Tts", "onInit: TTS引擎不支持中文");
                 } else {
-                    Log.i("Tts", "onInit: TTS引擎支持中文");
+                    LogUtils.i("Tts", "onInit: TTS引擎支持中文");
                 }
             } else {
-                Log.i("Tts", "onInit: TTS引擎初始化失败");
+                LogUtils.i("Tts", "onInit: TTS引擎初始化失败");
             }
         }
     }

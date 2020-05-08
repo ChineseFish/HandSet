@@ -1,7 +1,6 @@
 package gtzn.cordova.interval;
 
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -19,6 +18,8 @@ import java.util.List;
 
 import __PACKAGE_NAME__.MainActivity;
 
+import gtzn.utils.log.LogUtils;
+
 public class Remote {
     private Tts tts;
     private String remoteUrl;
@@ -29,8 +30,8 @@ public class Remote {
         tts = new Tts();
 
         //
-        // remoteUrl = "http://mg.zhoulvkeche.com";
-        remoteUrl = "http://192.168.11.175:3000";
+        remoteUrl = "http://mg.zhoulvkeche.com";
+        // remoteUrl = "http://192.168.11.175:3000";
 
         //
         ifStop = false;
@@ -50,11 +51,10 @@ public class Remote {
                 //
                 try {
 
-                    String requestUrl = remoteUrl + "/ashx/GetPlayVoice.ashx?busIdentifier=" + busIdentifier + "&index="
-                            + index;
+                    String requestUrl = remoteUrl + "/ashx/GetPlayVoice.ashx?busIdentifier=" + busIdentifier + "&index=" + index;
 
                     // test
-                    Log.d("fetchPayInfo requestUrl", requestUrl);
+                    LogUtils.d("fetchPayInfo requestUrl", requestUrl);
 
                     //
                     url = new URL(requestUrl);
@@ -73,7 +73,7 @@ public class Remote {
                     }
 
                     // test
-                    Log.d("fetchPayInfo response", response.toString());
+                    LogUtils.d("fetchPayInfo response", response.toString());
 
                     // translate to JSON format
                     JSONArray speechTextList = new JSONArray(response.toString());

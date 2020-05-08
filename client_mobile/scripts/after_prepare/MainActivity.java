@@ -19,29 +19,38 @@
 
 package __PACKAGE_NAME__;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.os.PowerManager;
+import android.os.storage.StorageManager;
 import android.provider.Settings;
 import android.util.Log;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Toast;
-
 import org.apache.cordova.CordovaActivity;
+import org.apache.cordova.LOG;
+
+import java.io.File;
 
 import gtzn.cordova.interval.Interval;
 import gtzn.cordova.interval.Tts;
+
+import gtzn.utils.log.LogUtils;
 
 public class MainActivity extends CordovaActivity {
     //
@@ -91,6 +100,18 @@ public class MainActivity extends CordovaActivity {
         settings.setLoadWithOverviewMode(true);
         settings.setUseWideViewPort(true);
 
+        // check privilege
+        if (!isIgnoringBatteryOptimizations()) {
+            //
+            requestIgnoreBatteryOptimizations();
+        }
+
+        //
+        checkStoragePermission();
+
+        // init log
+        initLog();
+
         // add js interface
         webView.addJavascriptInterface(this, "zsgtzn");
 
@@ -98,16 +119,20 @@ public class MainActivity extends CordovaActivity {
         tts = new Tts();
         interval = new Interval();
 
-        // check privilege
-        if (!isIgnoringBatteryOptimizations()) {
-            //
-            requestIgnoreBatteryOptimizations();
-        }
-
         // Set by <content src="index.html" /> in config.xml
         loadUrl(launchUrl);
     }
 
+    /************************************************
+     * log init
+     ************************************************/
+    private void initLog() {
+        LogUtils.setLogDir(Environment.getExternalStorageDirectory()+ File.separator + "putuoshanlvyoubashi_log");
+            LogUtils.setLogLevel(LogUtils.LogLevel.DEBUG);
+
+//            LogUtils.setLogLevel(LogUtils.LogLevel.WARN);
+    }
+    
     /************************************************
      * speech imediate
      ************************************************/
@@ -130,7 +155,33 @@ public class MainActivity extends CordovaActivity {
     }
 
     /************************************************
-     * check privilege
+     * check storage privilege
+     ************************************************/
+    public void checkStoragePermission() {
+        boolean isGranted = true;
+        if (android.os.Build.VERSION.SDK_INT >= 23) {
+            if (this.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                //如果没有写sd卡权限
+                isGranted = false;
+            }
+            if (this.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                isGranted = false;
+            }
+            Log.i("cbs","isGranted == "+isGranted);
+            if (!isGranted) {
+                this.requestPermissions(
+                        new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission
+                                .ACCESS_FINE_LOCATION,
+                                Manifest.permission.READ_EXTERNAL_STORAGE,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        102);
+            }
+        }
+
+    }
+
+    /************************************************
+     * check battery privilege
      ************************************************/
     @TargetApi(Build.VERSION_CODES.M)
     private boolean isIgnoringBatteryOptimizations() {

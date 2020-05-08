@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+    xmlns:rim="http://www.blackberry.com/ns/widgets"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    id="cordova-plugin-log"
+    version="0.0.1">
+
+    <name>log</name>
+    <description>A cordova plugin, a JS version of log SDK</description>
+    <author>18605807725</author>
+    <license>MIT</license>
+    <keywords>cordova,log</keywords>
+    <repo></repo>
+    <issue></issue>
+
+
+    <!-- js module-->
+    <js-module src="www/log.js" name="log">
+        <clobbers target="log" />
+    </js-module>
+
+    <!-- ios -->
+    <platform name="ios">
+        
+    </platform>
+
+    <!-- android -->
+    <platform name="android">
+        <hook type="after_plugin_add" src="scripts/android-install.js" />
+        <hook type="after_plugin_install" src="scripts/android-install.js" />
+        <hook type="before_plugin_rm" src="scripts/android-install.js" />
+        <hook type="before_plugin_uninstall" src="scripts/android-install.js" />
+
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="log">
+                <param name="android-package" value="gtzn.utils.log.CDVLog"/>
+                <param name="onload" value="true" />
+            </feature>
+        </config-file>
+
+        <source-file src="src/android/CDVLog.java" target-dir="gtzn/utils/log" />
+        <source-file src="src/android/FileUtils.java" target-dir="gtzn/utils/log" />
+        <source-file src="src/android/LogFileManager.java" target-dir="gtzn/utils/log" />
+        <source-file src="src/android/LogUtils.java" target-dir="gtzn/utils/log" />
+    </platform>
+</plugin>

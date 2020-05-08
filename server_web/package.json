@@ -1,5 +1,5 @@
 {
-  "name": "server-web",
+  "name": "server_web",
   "version": "0.0.0",
   "private": true,
   "scripts": {

@@ -1,4 +1,6 @@
 {
+    "name": "client_bridge",
+    "version": "0.0.1",
   "dependencies": {
     
   },

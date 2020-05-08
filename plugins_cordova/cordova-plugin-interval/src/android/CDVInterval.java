@@ -25,7 +25,7 @@ import org.apache.cordova.CordovaPlugin;
 
 import org.json.JSONException;
 
-import android.util.Log;
+import gtzn.utils.log.LogUtils;
 
 public class CDVInterval extends CordovaPlugin {
 
@@ -43,7 +43,7 @@ public class CDVInterval extends CordovaPlugin {
 
     @Override
     public boolean execute(String action, CordovaArgs args, CallbackContext callbackContext) throws JSONException {
-        Log.d(TAG, String.format("%s is called. Callback ID: %s.", action, callbackContext.getCallbackId()));
+        LogUtils.d(TAG, String.format("%s is called. Callback ID: %s.", action, callbackContext.getCallbackId()));
 
         if (action.equals("setIndentifier")) {
             String identifier = args.getString(0);
@@ -76,11 +76,11 @@ public class CDVInterval extends CordovaPlugin {
 
         super.pluginInitialize();
 
-        Log.d(TAG, "plugin initialized.");
+        LogUtils.d(TAG, "plugin initialized.");
     }
 
     protected boolean setIndentifier(String identifier, String index, CallbackContext callbackContext) {
-        Log.d(TAG, "setIndentifier begin");
+        LogUtils.d(TAG, "setIndentifier begin");
 
         //
         if (interval.start(identifier, index)) {

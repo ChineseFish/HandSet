@@ -1,4 +1,6 @@
 {
+    "name": "client_mock",
+    "version": "0.0.1",
   "dependencies": {
     "mockserver-client": "^5.10.0"
   }

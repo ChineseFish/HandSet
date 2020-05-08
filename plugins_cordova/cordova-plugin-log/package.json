@@ -1,0 +1,38 @@
+{
+  "name": "cordova-plugin-log",
+  "version": "0.0.1",
+  "description": "A cordova plugin, a JS version of log SDK",
+  "cordova": {
+    "id": "cordova-plugin-log",
+    "platforms": [
+      "android"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "keywords": [
+    "cordova",
+    "log",
+    "ecosystem:cordova",
+    "cordova-ios"
+  ],
+  "engines": {
+    "cordovaDependencies": {
+        "0.0.1": {
+          "cordova": ">=9.0.0",
+          "cordova-ios": ">=4.3.1"
+        }
+    }
+  },
+  "dependencies":{
+    "shelljs": "^0.5.3"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": ""
+  },
+  "homepage": ""
+}
