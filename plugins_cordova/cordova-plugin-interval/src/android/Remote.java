@@ -112,9 +112,9 @@ public class Remote {
                         e.printStackTrace();
                     }
                 } catch (MalformedURLException e) {
-                    e.printStackTrace();
+                    LogUtils.e("fetchPayInfo throw exception", e.toString());
                 } catch (IOException | JSONException e) {
-                    e.printStackTrace();
+                    LogUtils.e("fetchPayInfo throw exception", e.toString());
                 } finally {
                     if (connection != null) {
                         connection.disconnect();
