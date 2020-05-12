@@ -38,7 +38,7 @@ public class Remote {
     }
 
     //
-    public void fetchPayInfo(String busIdentifier) {
+    public void fetchPayInfo(final String busIdentifier) {
         Thread thread = new Thread() {
             @Override
             public void run() {

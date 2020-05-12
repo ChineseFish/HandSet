@@ -37,8 +37,8 @@ import android.os.Message;
 import android.os.PowerManager;
 import android.os.storage.StorageManager;
 import android.provider.Settings;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
+//import android.support.v4.app.ActivityCompat;
+//import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
@@ -87,13 +87,13 @@ public class MainActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
         //
         mSp = getSharedPreferences("gtzn", MODE_PRIVATE);
 
         //
-        webView = (WebView) findViewById(R.id.webView);
-
+        webView = findViewById(R.id.webView);
         // 开启 localStorage
         webView.getSettings().setDomStorageEnabled(true);
         // 设置支持javascript
@@ -106,10 +106,10 @@ public class MainActivity extends Activity {
         webView.getSettings().setLoadWithOverviewMode(true);
         // 开启视口模式
         webView.getSettings().setUseWideViewPort(true);
-        //使用自定义的WebViewClient
+        // 使用自定义的WebViewClient
         webView.setWebViewClient(new WebViewClient()
         {
-            //覆盖shouldOverrideUrlLoading 方法
+            // 覆盖shouldOverrideUrlLoading 方法
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url)
             {
@@ -120,42 +120,11 @@ public class MainActivity extends Activity {
             @Override
             public void onPageFinished(WebView view, String url)
             {
-//                if (url.indexOf("STATUS=1") != -1 && jumpFlag)
-//                {
-//                    jumpFlag = false;
-//                    finish();
-//                    Intent intent = new Intent(PayActivity.this, ResultActivity.class);
-//
-//                    intent.putExtra("replacementShip", replacementShip);
-//                    intent.putExtra("replacementBus", replacementBus);
-//                    intent.putExtra("replacementAdmission", replacementAdmission);
-//                    intent.putExtra("replacementShipHalf", replacementShipHalf);
-//                    intent.putExtra("replacementShip1", replacementShip1);
-//                    intent.putExtra("replacementShip2", replacementShip2);
-//                    intent.putExtra("replacementBusHalf", replacementBusHalf);
-//                    intent.putExtra("replacementAdmissionHalf", replacementAdmissionHalf);
-//                    intent.putExtra("ship_bunk", ship_bunk);
-//                    intent.putExtra("ship_fee", ship_fee);
-//                    intent.putExtra("bus_fee", bus_fee);
-//                    intent.putExtra("admission_fee", admission_fee);
-//                    intent.putExtra("ship_fee_half", ship_fee_half);
-//                    intent.putExtra("bus_fee_half", bus_fee_half);
-//                    intent.putExtra("admission_fee_half", admission_fee_half);
-//
-//                    intent.putExtra("idcard_flag", idcard_flag);
-//                    intent.putExtra("no", no);
-//                    intent.putExtra("name", name);
-//                    intent.putExtra("serialNumber", serialNumber);
-//
-//                    startActivity(intent);
-//                }
+
             }
 
         });
-        Date now = new Date();
-        SimpleDateFormat serialFormat = new SimpleDateFormat("yyyyMMddHHmmss");				// 可以方便地修改日期格式
-
-        webView.loadUrl("https://www.baidu.com");
+        webView.loadUrl("http://192.168.11.175:5000");
 
 
         // disable battery optimizations
@@ -173,9 +142,6 @@ public class MainActivity extends Activity {
 
         // add js interface
         webView.addJavascriptInterface(this, "zsgtzn");
-
-        // Set by <content src="index.html" /> in config.xml
-        loadUrl(launchUrl);
     }
 
     /************************************************
@@ -184,8 +150,6 @@ public class MainActivity extends Activity {
     private void initLog() {
         LogUtils.setLogDir(Environment.getExternalStorageDirectory()+ File.separator + "putuoshanlvyoubashi_log");
             LogUtils.setLogLevel(LogUtils.LogLevel.DEBUG);
-
-//            LogUtils.setLogLevel(LogUtils.LogLevel.WARN);
     }
     
     /************************************************
@@ -213,28 +177,28 @@ public class MainActivity extends Activity {
      * check storage privilege
      ************************************************/    
     public void checkStoragePermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-                || ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-
-            // Permission is not granted, show an explanation
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)
-                    || ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                        1);
-            } else {
-                // No explanation needed; request the permission
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                        1);
-            }
-        } else {
-            // init log
-            initLog();
-        }
+//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+//                || ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+//
+//            // Permission is not granted, show an explanation
+//            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+//                    || ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+//                // Show an explanation to the user *asynchronously* -- don't block
+//                // this thread waiting for the user's response! After the user
+//                // sees the explanation, try again to request the permission.
+//                ActivityCompat.requestPermissions(this,
+//                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
+//                        1);
+//            } else {
+//                // No explanation needed; request the permission
+//                ActivityCompat.requestPermissions(this,
+//                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
+//                        1);
+//            }
+//        } else {
+//            // init log
+//            initLog();
+//        }
     }
 
     @Override
