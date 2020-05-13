@@ -16,7 +16,7 @@ module.exports = {
     ],
     output: {
         // 配置打包文件输出的目录
-        path: path.resolve(__dirname, '../../client_mobile/www'),
+        path: path.resolve(__dirname, '../../server_web/public'),
         // 生成的js文件名称
         filename: 'js/[name].[hash:8].js',
         // chunkname就是未被列在entry中，但有些场景需要被打包出来的文件命名配置。
