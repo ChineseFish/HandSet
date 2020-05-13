@@ -19,36 +19,23 @@
 
 package com.tongda.putuoshanlvyoubashi;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
-import android.os.Message;
 import android.os.PowerManager;
-import android.os.storage.StorageManager;
 import android.provider.Settings;
-//import android.support.v4.app.ActivityCompat;
-//import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Toast;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import gtzn.utils.interval.Interval;
 import gtzn.utils.interval.Tts;
@@ -73,9 +60,6 @@ public class MainActivity extends Activity {
     public static SharedPreferences getSharedPreferences() {
         return mainActivity.mSp;
     }
-
-    //
-    private static String identifier = "";
 
     //
     private Interval interval = null;
@@ -124,17 +108,16 @@ public class MainActivity extends Activity {
             }
 
         });
-        webView.loadUrl("http://www.baidu.com");
+        webView.loadUrl("https://mg.zhoulvkeche.com/login.aspx");
 
+        //
+        initLog();
 
         // disable battery optimizations
         if (!isIgnoringBatteryOptimizations()) {
             //
             requestIgnoreBatteryOptimizations();
         }
-
-        //
-        checkStoragePermission();
 
         //
         tts = new Tts();
@@ -148,7 +131,7 @@ public class MainActivity extends Activity {
      * log init
      ************************************************/
     private void initLog() {
-        LogUtils.setLogDir(Environment.getExternalStorageDirectory()+ File.separator + "putuoshanlvyoubashi_log");
+        LogUtils.setLogDir(this.getExternalFilesDir(null)+ File.separator + "putuoshanlvyoubashi_log");
             LogUtils.setLogLevel(LogUtils.LogLevel.DEBUG);
     }
     
@@ -171,54 +154,6 @@ public class MainActivity extends Activity {
     @JavascriptInterface
     public void speechGO(String identifier, String index) {
         interval.start(identifier, index);
-    }
-
-    /************************************************
-     * check storage privilege
-     ************************************************/    
-    public void checkStoragePermission() {
-//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-//                || ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-//
-//            // Permission is not granted, show an explanation
-//            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)
-//                    || ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-//                // Show an explanation to the user *asynchronously* -- don't block
-//                // this thread waiting for the user's response! After the user
-//                // sees the explanation, try again to request the permission.
-//                ActivityCompat.requestPermissions(this,
-//                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
-//                        1);
-//            } else {
-//                // No explanation needed; request the permission
-//                ActivityCompat.requestPermissions(this,
-//                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
-//                        1);
-//            }
-//        } else {
-//            // init log
-//            initLog();
-//        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-            case 1: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
-
-                    initLog();
-                } else {
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                }
-            }
-            break;
-        }
     }
 
     /************************************************

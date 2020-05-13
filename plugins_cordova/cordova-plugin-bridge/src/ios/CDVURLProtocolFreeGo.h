@@ -1,3 +1,0 @@
-@interface CDVURLProtocolFreeGo : NSURLProtocol
-
-@end

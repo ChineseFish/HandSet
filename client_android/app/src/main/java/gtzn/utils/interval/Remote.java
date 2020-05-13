@@ -1,7 +1,5 @@
 package gtzn.utils.interval;
 
-import android.content.SharedPreferences;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -10,13 +8,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.List;
-
-import com.tongda.putuoshanlvyoubashi.MainActivity;
 
 import gtzn.utils.log.LogUtils;
 
@@ -30,8 +24,7 @@ public class Remote {
         tts = new Tts();
 
         //
-        remoteUrl = "http://mg.zhoulvkeche.com";
-        // remoteUrl = "http://192.168.11.175:3000";
+        remoteUrl = "https://mg.zhoulvkeche.com";
 
         //
         ifStop = false;
