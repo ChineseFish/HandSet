@@ -124,7 +124,7 @@ public class MainActivity extends Activity {
             }
 
         });
-        webView.loadUrl("http://192.168.11.175:5000");
+        webView.loadUrl("http://www.baidu.com");
 
 
         // disable battery optimizations
