@@ -1,0 +1,335 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.handheld.IDCard.MainActivity" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="10"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="10"
+                android:orientation="horizontal" 
+                android:background="@drawable/idbg">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="5"
+                    android:orientation="vertical" >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:orientation="horizontal" >
+                        <TextView
+                            android:id="@+id/textview_config_info"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=""/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:orientation="horizontal" >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="姓名："
+                            android:textColor="#388E8E"
+                            android:textSize="26dp" />
+
+                        <EditText
+                            android:id="@+id/editText_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:editable="false"
+                            android:hint="请输入"
+                            android:textSize="26dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:orientation="horizontal" >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="性别："
+                            android:textColor="#388E8E"
+                            android:textSize="26dp" />
+
+                        <EditText
+                            android:id="@+id/editText_sex"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:editable="false"
+                            android:hint="男"
+                            android:textSize="26dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:orientation="horizontal" >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="民族："
+                            android:textColor="#388E8E"
+                            android:textSize="26dp" />
+
+                        <EditText
+                            android:id="@+id/editText_nation"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:editable="false"
+                            android:hint="壮"
+                            android:textSize="26dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:orientation="horizontal" >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="出生："
+                            android:textColor="#388E8E"
+                            android:textSize="26dp" />
+
+                        <EditText
+                            android:id="@+id/editText_year"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:editable="false"
+                            android:hint="xxxx"
+                            android:textSize="26dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="年"
+                            android:textColor="#388E8E"
+                            android:textSize="26dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:orientation="horizontal" >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="\t\t\t"
+                            android:textSize="26dp" />
+
+                        <EditText
+                            android:id="@+id/editText_month"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:editable="false"
+                            android:hint="xx"
+                            android:textSize="26dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="月"
+                            android:textColor="#388E8E"
+                            android:textSize="26dp" />
+
+                        <EditText
+                            android:id="@+id/editText_day"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:editable="false"
+                            android:hint="xx"
+                            android:textSize="26dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="日"
+                            android:textColor="#388E8E"
+                            android:textSize="26dp" />
+                    </LinearLayout>
+
+                   
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginBottom="10sp"
+		            android:layout_marginTop="10sp" 
+		            android:layout_marginRight="30sp"
+		            android:layout_marginLeft="30sp"
+                    android:layout_weight="5" 
+                    android:src="@drawable/photo"/>
+            </LinearLayout>
+			<LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="10"
+                android:orientation="vertical" 
+                android:background="@drawable/idbg2">
+                 <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="住址："
+                    android:textColor="#388E8E"
+                    android:textSize="26dp" />
+
+                <EditText
+                    android:id="@+id/editText_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:editable="false"
+                    android:hint="请输入"
+                    android:lines="2"
+                    android:textSize="26dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="身份证号："
+                    android:textSize="26dp" 
+                    android:textColor="#388E8E"/>
+
+                <EditText
+                    android:id="@+id/editText_IDCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:editable="false"
+                    android:hint="请输入"
+                    android:text=""
+                    android:textSize="26dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="签发机关："
+                    android:textSize="26dp" 
+                    android:textColor="#388E8E"/>
+
+                <EditText
+                    android:id="@+id/editText_office"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:editable="false"
+                    android:hint="请输入"
+                    android:textSize="26dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="有效期间："
+                    android:textSize="26dp" 
+                    android:textColor="#388E8E"/>
+
+                <EditText
+                    android:id="@+id/editText_effective"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:editable="false"
+                    android:hint="请输入"
+                    android:lines="2"
+                    android:textSize="26dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="3"
+                android:orientation="horizontal" >
+				
+
+                        <Button
+                            android:id="@+id/button_open"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:text="打开\n设备"
+                            android:textSize="26dp" />
+
+                        <Button
+                            android:id="@+id/button_close"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:text="关闭\n设备"
+                            android:textSize="26dp" />
+
+
+                        <Button
+                            android:id="@+id/button_clear"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:text="清空"
+                            android:textSize="26dp" />
+
+                        <Button
+                            android:id="@+id/button_finish"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:text="退出"
+                            android:textSize="26dp" />
+                </LinearLayout>
+                </LinearLayout>
+           
+                
+            </LinearLayout>
+        </LinearLayout>
+
+</RelativeLayout>

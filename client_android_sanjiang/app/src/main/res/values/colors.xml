@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="colorTou">#00ffffff</color>
+    <color name="topChenJin">#1B88EE</color>
+    <color name="white">#ffffff</color>
+    <color name="grid_view_background">#FFFFFF</color>
+    <color name="text_black">#000000</color>
+    <color name="new_msg_info">#ff0000</color>
+    <color name="green">#59ff00</color>
+    <color name="zise">#ff00e5</color>
+    <color name="light_zi">#54ae00ff</color>
+</resources>
