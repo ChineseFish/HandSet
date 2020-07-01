@@ -1,0 +1,33 @@
+06-27 07:34:40.364 pid=9188 Tts: gtzn:onInit: TTS引擎初始化成功
+06-27 07:34:40.460 pid=9188 Tts: gtzn:onInit: TTS引擎支持中文
+06-27 07:34:42.827 pid=9188 Interval: gtzn:start, begin
+06-27 07:34:42.838 pid=9188 Db: gtzn:writeBusIdentifierIndex, key: 69, value: 0
+06-27 07:34:42.841 pid=9188 Tts: gtzn:onInit: TTS引擎初始化成功
+06-27 07:34:42.967 pid=9188 Tts: gtzn:onInit: TTS引擎支持中文
+06-27 07:34:43.355 pid=9188 Interval: gtzn:scanHandler begin to work
+06-27 07:34:43.355 pid=9188 Interval handleMessage: gtzn:释放了锁
+06-27 07:34:43.357 pid=9188 Db: gtzn:getBusIdentifierIndex, key: 69, value: 0
+06-27 07:34:43.357 pid=9188 fetchPayInfo requestUrl: gtzn:https://mg.zhoulvkeche.com/ashx/GetPlayVoice.ashx?busIdentifier=69&index=0
+06-27 07:34:43.620 pid=9188 fetchPayInfo response: gtzn:[  {    "index": "280792",    "text": "18号座到账20元"  }]
+06-27 07:34:43.640 pid=9188 Db: gtzn:writeBusIdentifierIndex, key: 69, value: 280792
+06-27 07:34:53.340 pid=9188 Interval: gtzn:scanHandler begin to work
+06-27 07:34:53.341 pid=9188 Interval handleMessage: gtzn:释放了锁
+06-27 07:34:53.341 pid=9188 Db: gtzn:getBusIdentifierIndex, key: 69, value: 280792
+06-27 07:34:53.342 pid=9188 fetchPayInfo requestUrl: gtzn:https://mg.zhoulvkeche.com/ashx/GetPlayVoice.ashx?busIdentifier=69&index=280792
+06-27 07:34:53.403 pid=9188 fetchPayInfo response: gtzn:[]
+06-27 07:35:03.341 pid=9188 Interval: gtzn:scanHandler begin to work
+06-27 07:35:03.342 pid=9188 Interval handleMessage: gtzn:释放了锁
+06-27 07:35:03.342 pid=9188 Db: gtzn:getBusIdentifierIndex, key: 69, value: 280792
+06-27 07:35:03.344 pid=9188 fetchPayInfo requestUrl: gtzn:https://mg.zhoulvkeche.com/ashx/GetPlayVoice.ashx?busIdentifier=69&index=280792
+06-27 07:35:03.404 pid=9188 fetchPayInfo response: gtzn:[]
+06-27 07:35:13.341 pid=9188 Interval: gtzn:scanHandler begin to work
+06-27 07:35:13.342 pid=9188 Interval handleMessage: gtzn:释放了锁
+06-27 07:35:13.415 pid=9188 fetchPayInfo response: gtzn:[  {    "index": "280948",    "text": "15号座到账15元"  }]
+06-27 07:35:13.342 pid=9188 Db: gtzn:getBusIdentifierIndex, key: 69, value: 280792
+06-27 07:35:13.343 pid=9188 fetchPayInfo requestUrl: gtzn:https://mg.zhoulvkeche.com/ashx/GetPlayVoice.ashx?busIdentifier=69&index=280792
+06-27 07:35:13.415 pid=9188 fetchPayInfo response: gtzn:[  {    "index": "280948",    "text": "15号座到账15元"  }]
+06-27 07:45:18.838 pid=9188 Interval: gtzn:scanHandler begin to work
+06-27 07:45:18.841 pid=9188 Interval handleMessage: gtzn:释放了锁
+06-27 07:45:18.841 pid=9188 Db: gtzn:getBusIdentifierIndex, key: 69, value: 281148
+06-27 07:45:18.842 pid=9188 fetchPayInfo requestUrl: gtzn:https://mg.zhoulvkeche.com/ashx/GetPlayVoice.ashx?busIdentifier=69&index=281148
+06-27 07:45:18.964 pid=9188 fetchPayInfo response: gtzn:[  {    "index": "281152",    "text": "12号座到账20元"  },  {    "index": "281156",    "text": "12号座到账20元"  },  {    "index": "281157",    "text": "12号座到账20元"  },  {    "index": "281158",    "text": "12号座到账20元"  }]
