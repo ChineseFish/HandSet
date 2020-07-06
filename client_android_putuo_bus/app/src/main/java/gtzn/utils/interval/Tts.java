@@ -29,10 +29,19 @@ public class Tts {
         }
     }
 
-    private TextToSpeech mSpeech = null;
+    private static TextToSpeech mSpeech = null;
 
     public Tts() {
-        mSpeech = new TextToSpeech(MainActivity.getMainActivity(), new TTSListener());
+        if(mSpeech == null)
+        {
+            LogUtils.d("Tts", "init audio module");
+
+            mSpeech = new TextToSpeech(MainActivity.getMainActivity(), new TTSListener());
+        }
+        else
+        {
+            LogUtils.d("Tts", "audio module had been inited");
+        }
     }
 
     public void textToSpeech(String text) {

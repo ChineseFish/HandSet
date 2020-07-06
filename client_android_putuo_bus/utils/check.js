@@ -3,7 +3,7 @@ const path = require("path");
 
 const check1 = function(content)
 {
-    const reg = /gtzn:\[(.+)\](.+?)gtzn:\[\1\]/gs;
+    const reg = /gtzn:\[(.+)\]((.|\n|\r\n)+?)gtzn:\[\1\]/g;
     return content.match(reg)
 }
 

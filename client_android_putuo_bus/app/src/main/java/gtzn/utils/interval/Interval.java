@@ -20,23 +20,25 @@ public class Interval {
     }
 
     @SuppressLint("HandlerLeak")
+    private Handler remoteHandler = new Handler() {
+        public void handleMessage(Message msg) {
+            LogUtils.d("Interval handleMessage", "remoteHandler 释放锁");
+            
+            //
+            remoteLock.unlock();
+        }
+    };
+
+    @SuppressLint("HandlerLeak")
     private Handler scanHandler = new Handler() {
         public void handleMessage(Message msg) {
             LogUtils.d("Interval", "scanHandler begin to work");
 
-            //
-            try
-            {
-                remoteLock.lock();
+            remoteLock.lock();
 
-                remote.fetchPayInfo(identifier);
-            } catch (Exception e) {
-                // TODO: handle exception
-            } finally {
-                LogUtils.d("Interval handleMessage", "释放了锁");
+            LogUtils.d("Interval handleMessage", "scanHandler 添加锁");
 
-                remoteLock.unlock();
-            }
+            remote.fetchPayInfo(identifier);
         }
     };
 
@@ -53,18 +55,18 @@ public class Interval {
 
                 remote.stopFetchPayInfo();
 
-                remote = new Remote();
+                remote = new Remote(remoteHandler);
             } catch (Exception e) {
                 // TODO: handle exception
             } finally {
-                LogUtils.d("Interval handleMessage", "释放了锁");
+                LogUtils.d("Interval handleMessage", "start 释放了锁");
 
                 remoteLock.unlock();
             }
         }
         else
         {
-            remote = new Remote();
+            remote = new Remote(remoteHandler);
         }
 
         // change idendifier
@@ -87,9 +89,14 @@ public class Interval {
         try {
             scanThread = new ScanThread(scanHandler);
         } catch (Exception e) {
+            LogUtils.d("Interval", "start, new ScanThread throw exception, " + e.toString());
+
             return false;
         }
         scanThread.start();
+
+        //
+        LogUtils.d("Interval", "start, thread begun");
 
         //
         return true;
@@ -111,7 +118,7 @@ public class Interval {
             } catch (Exception e) {
                 // TODO: handle exception
             } finally {
-                LogUtils.d("Interval handleMessage", "释放了锁");
+                LogUtils.d("Interval handleMessage", "stop 释放了锁");
 
                 remoteLock.unlock();
             }
@@ -123,6 +130,9 @@ public class Interval {
             scanThread.interrupt();
 
             scanThread = null;
+
+            //
+            LogUtils.d("Interval", "stop, thread end");
         }
     }
 }

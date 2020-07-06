@@ -1,5 +1,8 @@
 package gtzn.utils.interval;
 
+import android.os.Handler;
+import android.os.Message;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,8 +22,13 @@ public class Remote {
     private String remoteUrl;
     private Boolean ifStop;
 
+    private Handler handler;
+
     //
-    public Remote() {
+    public Remote(Handler handler) {
+        this.handler = handler;
+
+        //
         tts = new Tts();
 
         //
@@ -35,6 +43,9 @@ public class Remote {
         Thread thread = new Thread() {
             @Override
             public void run() {
+                long startTime = System.currentTimeMillis();
+
+                //
                 URL url;
                 HttpURLConnection connection = null;
 
@@ -74,11 +85,9 @@ public class Remote {
                         return;
                     }
 
-                    // alarm begin
-                    JSONObject speechResult = new JSONObject();
-                    JSONArray successList = new JSONArray();
-                    JSONArray failList = new JSONArray();
-
+                    /**
+                     * alarm begin
+                     */
                     // fetch speech text
                     String speechText = "";
                     for (int i = 0; i < speechTextList.length(); i++) {
@@ -89,26 +98,34 @@ public class Remote {
                     int maxIndex = speechTextList.length() - 1;
                     String newIndex = speechTextList.getJSONObject(maxIndex).getString("index");
 
-                    // speech
-                    try {
-                        if (ifStop) {
-                            return;
-                        }
-
-                        tts.textToSpeech(speechText);
-
-                        // update index
-                        Db.writeBusIdentifierIndex(busIdentifier, newIndex);
-
-                    } catch (Exception e) {
-                        //
-                        e.printStackTrace();
+                    /**
+                     * speech
+                     */
+                    if (ifStop) {
+                        return;
                     }
+
+                    tts.textToSpeech(speechText);
+
+                    // update index
+                    Db.writeBusIdentifierIndex(busIdentifier, newIndex);
                 } catch (MalformedURLException e) {
                     LogUtils.e("fetchPayInfo throw exception", e.toString());
                 } catch (IOException | JSONException e) {
                     LogUtils.e("fetchPayInfo throw exception", e.toString());
+                } catch (Exception e) {
+                    LogUtils.e("fetchPayInfo throw exception", e.toString());
                 } finally {
+                    //
+                    long endTime = System.currentTimeMillis();
+                    // 输出程序运行时间
+                    LogUtils.d("Remote" ,"fetchPayInfo run time：" + (endTime - startTime) + "ms");
+
+                    //
+                    Message msg = new Message();
+                    handler.sendMessage(msg);
+
+                    //
                     if (connection != null) {
                         connection.disconnect();
                     }
