@@ -15,6 +15,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import gtzn.utils.aop.PrintTimeElapseAnnotation;
 import gtzn.utils.log.LogUtils;
 
 public class Remote {
@@ -42,9 +43,8 @@ public class Remote {
     public void fetchPayInfo(final String busIdentifier) {
         Thread thread = new Thread() {
             @Override
+            @PrintTimeElapseAnnotation("Remote fetchPayInfo")
             public void run() {
-                long startTime = System.currentTimeMillis();
-
                 //
                 URL url;
                 HttpURLConnection connection = null;
@@ -116,10 +116,6 @@ public class Remote {
                 } catch (Exception e) {
                     LogUtils.e("fetchPayInfo throw exception", e.toString());
                 } finally {
-                    // 输出程序运行时间
-                    long endTime = System.currentTimeMillis();
-                    LogUtils.d("Remote" ,"fetchPayInfo run time：" + (endTime - startTime) + "ms");
-
                     //
                     Message msg = new Message();
                     handler.sendMessage(msg);

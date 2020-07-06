@@ -5,6 +5,7 @@ import java.io.IOException;
 import android.os.Handler;
 import android.os.Message;
 
+import gtzn.utils.aop.PrintTimeElapseAnnotation;
 import gtzn.utils.log.LogUtils;
 
 public class ScanThread extends Thread {
@@ -32,27 +33,29 @@ public class ScanThread extends Thread {
         }
     }
 
+    @PrintTimeElapseAnnotation("ScanThread handlerTicketCheck")
+    public void handlerTicketCheck() throws Exception
+    {
+        //
+        Message msg = new Message();
+
+        handler.sendMessage(msg);
+
+        //
+        Thread.sleep(INTERVAL);
+    }
+
     @Override
     public void run() {
         try {
             // isInterrupted() will throw an exception when thread call interrupted()
             // and interrupted mark is set to true
             while (!isInterrupted()) {
-                long startTime = System.currentTimeMillis();
-
                 //
                 LogUtils.d("ScanThread", "run begin");
 
                 //
-                Message msg = new Message();
-
-                handler.sendMessage(msg);
-
-                Thread.sleep(INTERVAL);
-
-                //
-                long endTime = System.currentTimeMillis();
-                LogUtils.d("ScanThread", "run end, elapsed time：" + (endTime - startTime) + "ms");
+                handlerTicketCheck();
             }
 
             //
