@@ -116,9 +116,8 @@ public class Remote {
                 } catch (Exception e) {
                     LogUtils.e("fetchPayInfo throw exception", e.toString());
                 } finally {
-                    //
-                    long endTime = System.currentTimeMillis();
                     // 输出程序运行时间
+                    long endTime = System.currentTimeMillis();
                     LogUtils.d("Remote" ,"fetchPayInfo run time：" + (endTime - startTime) + "ms");
 
                     //
