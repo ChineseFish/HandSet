@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 public class LogFileManager {
-    private static final int LOG_FILES_MAX_NUM = 5; // 文件最多有5个
+    private static final int LOG_FILES_MAX_NUM = 100; // 文件最多有5个
     private static final int LOG_FILE_MAX_SIZE = 1000 * 1000; // 文件最大1MB
 
     private static final SimpleDateFormat LOG_FILE_DATE_FORMAT = new SimpleDateFormat("MM-dd-HH-mm");
