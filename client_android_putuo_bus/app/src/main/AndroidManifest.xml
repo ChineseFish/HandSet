@@ -29,5 +29,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name="gtzn.utils.interval.ScanService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <receiver
+            android:name="gtzn.utils.interval.Remote"
+            android:enabled="true"
+            android:exported="true"></receiver>
     </application>
 </manifest>

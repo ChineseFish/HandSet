@@ -1,73 +1,24 @@
 package gtzn.utils.interval;
 
-import android.annotation.SuppressLint;
-import android.os.Handler;
-import android.os.Message;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
+import com.tongda.putuoshanlvyoubashi.MainActivity;
 
 import gtzn.utils.log.LogUtils;
 
 public class Interval {
-    private ScanThread scanThread = null;
-    private String identifier = null;
-    private Remote remote = null;
-    private Lock remoteLock = new ReentrantLock();
+    private boolean ifScanServiceStart = false;
+    public static String identifier = null;
 
     public Interval() {
 
     }
 
-    @SuppressLint("HandlerLeak")
-    private Handler remoteHandler = new Handler() {
-        public void handleMessage(Message msg) {
-            LogUtils.d("Interval handleMessage", "remoteHandler 释放锁");
-            
-            //
-            remoteLock.unlock();
-        }
-    };
-
-    @SuppressLint("HandlerLeak")
-    private Handler scanHandler = new Handler() {
-        public void handleMessage(Message msg) {
-            LogUtils.d("Interval", "scanHandler begin to work");
-
-            remoteLock.lock();
-
-            LogUtils.d("Interval handleMessage", "scanHandler 添加锁");
-
-            remote.fetchPayInfo(identifier);
-        }
-    };
-
     public boolean start(String identifier, String index) {
         LogUtils.d("Interval", "start, begin");
-
-        //
-        if(remote != null)
-        {
-            try
-            {
-                //
-                remoteLock.lock();
-
-                remote.stopFetchPayInfo();
-
-                remote = new Remote(remoteHandler);
-            } catch (Exception e) {
-                // TODO: handle exception
-            } finally {
-                LogUtils.d("Interval handleMessage", "start 释放了锁");
-
-                remoteLock.unlock();
-            }
-        }
-        else
-        {
-            remote = new Remote(remoteHandler);
-        }
 
         // change idendifier
         this.identifier = identifier;
@@ -77,26 +28,20 @@ public class Interval {
         // will result in a competition situation, occur repeat speech,
         Db.writeBusIdentifierIndex(identifier, index);
 
-        // check scanThread
-        if (scanThread != null) {
-            LogUtils.d("Interval", "start, thread has begun");
+        // check scanService
+        if (ifScanServiceStart == true) {
+            LogUtils.d("Interval", "start, scanService has begun");
 
             //
             return true;
         }
 
-        //
-        try {
-            scanThread = new ScanThread(scanHandler);
-        } catch (Exception e) {
-            LogUtils.d("Interval", "start, new ScanThread throw exception, " + e.toString());
-
-            return false;
-        }
-        scanThread.start();
+        // begin scan service
+        Intent intent = new Intent(MainActivity.getMainActivity(), ScanService.class);
+        MainActivity.getMainActivity().startService(intent);
 
         //
-        LogUtils.d("Interval", "start, thread begun");
+        LogUtils.d("Interval", "start, scanService begun");
 
         //
         return true;
@@ -104,35 +49,23 @@ public class Interval {
 
     public void stop() {
         //
-        if (remote != null) {
-            try
-            {
-                //
-                remoteLock.lock();
-
-                //
-                remote.stopFetchPayInfo();
-
-                //
-                remote = null;
-            } catch (Exception e) {
-                // TODO: handle exception
-            } finally {
-                LogUtils.d("Interval handleMessage", "stop 释放了锁");
-
-                remoteLock.unlock();
-            }
-        }
-        
-        //
-        if(null != scanThread)
+        if(false == ifScanServiceStart)
         {
-            scanThread.interrupt();
-
-            scanThread = null;
-
-            //
-            LogUtils.d("Interval", "stop, thread end");
+            return;
         }
+
+        // stop alarm manager
+        AlarmManager manager = (AlarmManager) MainActivity.getMainActivity().getSystemService(Context.ALARM_SERVICE);
+        // fetch broadcast instance
+        Intent intent = new Intent(MainActivity.getMainActivity(), Remote.class);
+        PendingIntent pi = PendingIntent.getBroadcast(MainActivity.getMainActivity(), 0, intent, 0);
+        //
+        manager.cancel(pi);
+
+        //
+        ifScanServiceStart = false;
+
+        //
+        LogUtils.d("Interval", "stop, scanService end");
     }
 }

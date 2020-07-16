@@ -1,11 +1,12 @@
 package gtzn.utils.interval;
 
-import android.os.Handler;
-import android.os.Message;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,48 +15,48 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import gtzn.utils.aop.PrintTimeElapseAnnotation;
 import gtzn.utils.log.LogUtils;
 
-public class Remote {
+public class Remote extends BroadcastReceiver {
     private Tts tts;
     private String remoteUrl;
-    private Boolean ifStop;
 
-    private Handler handler;
+    private Lock remoteLock = new ReentrantLock();
 
     //
-    public Remote(Handler handler) {
-        this.handler = handler;
-
+    public Remote() {
         //
         tts = new Tts();
 
         //
         remoteUrl = "https://mg.zhoulvkeche.com";
-
-        //
-        ifStop = false;
     }
 
-    //
-    public void fetchPayInfo(final String busIdentifier) {
+    @Override
+    public void onReceive(final Context context, Intent intent) {
+
         Thread thread = new Thread() {
             @Override
             @PrintTimeElapseAnnotation("Remote fetchPayInfo")
             public void run() {
                 //
+                remoteLock.lock();
+
+                //
                 URL url;
                 HttpURLConnection connection = null;
 
                 //
-                String index = Db.getBusIdentifierIndex(busIdentifier);
+                String index = Db.getBusIdentifierIndex(Interval.identifier);
 
                 //
                 try {
 
-                    String requestUrl = remoteUrl + "/ashx/GetPlayVoice.ashx?busIdentifier=" + busIdentifier + "&index=" + index;
+                    String requestUrl = remoteUrl + "/ashx/GetPlayVoice.ashx?busIdentifier=" + Interval.identifier + "&index=" + index;
 
                     // test
                     LogUtils.d("fetchPayInfo requestUrl", requestUrl);
@@ -66,6 +67,11 @@ public class Remote {
                     connection.setRequestMethod("GET");
                     connection.setConnectTimeout(2000);
                     connection.setReadTimeout(2000);
+
+                    //
+                    LogUtils.d("fetchPayInfo", "begin to fetch data");
+
+                    //
                     InputStream in = connection.getInputStream();
 
                     // read response data
@@ -101,14 +107,11 @@ public class Remote {
                     /**
                      * speech
                      */
-                    if (ifStop) {
-                        return;
-                    }
 
                     tts.textToSpeech(speechText);
 
                     // update index
-                    Db.writeBusIdentifierIndex(busIdentifier, newIndex);
+                    Db.writeBusIdentifierIndex(Interval.identifier, newIndex);
                 } catch (MalformedURLException e) {
                     LogUtils.e("fetchPayInfo throw exception", e.toString());
                 } catch (IOException | JSONException e) {
@@ -116,22 +119,25 @@ public class Remote {
                 } catch (Exception e) {
                     LogUtils.e("fetchPayInfo throw exception", e.toString());
                 } finally {
-                    //
-                    Message msg = new Message();
-                    handler.sendMessage(msg);
-
-                    //
                     if (connection != null) {
                         connection.disconnect();
+                    }
+
+                    //
+                    remoteLock.unlock();
+
+                    // jump to scan service
+                    Intent i = new Intent(context, ScanService.class);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        // 这是8.0以后的版本需要这样跳转
+                        context.startForegroundService(i);
+                    } else {
+                        context.startService(i);
                     }
                 }
             }
         };
 
         thread.start();
-    }
-
-    public void stopFetchPayInfo() {
-        ifStop = true;
     }
 }
