@@ -36,6 +36,10 @@ public class Interval {
             return true;
         }
 
+
+        //
+        ifScanServiceStart = true;
+
         // begin scan service
         Intent intent = new Intent(MainActivity.getMainActivity(), ScanService.class);
         MainActivity.getMainActivity().startService(intent);
