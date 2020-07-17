@@ -10,7 +10,7 @@ import com.tongda.putuoshanlvyoubashi.MainActivity;
 import gtzn.utils.log.LogUtils;
 
 public class Interval {
-    private boolean ifScanServiceStart = false;
+    private boolean ifSpeechBroadCastRunning = false;
     public static String identifier = null;
 
     public Interval() {
@@ -29,19 +29,24 @@ public class Interval {
         Db.writeBusIdentifierIndex(identifier, index);
 
         // check scanService
-        if (ifScanServiceStart == true) {
+        if (ifSpeechBroadCastRunning == true) {
             LogUtils.d("Interval", "start, scanService has begun");
 
             //
             return true;
         }
 
+        //
+        stop();
 
         //
-        ifScanServiceStart = true;
+        ifSpeechBroadCastRunning = true;
 
-        // begin scan service
+        // begin alarm
         Intent intent = new Intent(MainActivity.getMainActivity(), ScanService.class);
+        // If this service is not already running,
+        // it will be instantiated and started (creating a process for it if needed);
+        // if it is running then it remains running.
         MainActivity.getMainActivity().startService(intent);
 
         //
@@ -52,24 +57,18 @@ public class Interval {
     }
 
     public void stop() {
-        //
-        if(false == ifScanServiceStart)
-        {
-            return;
-        }
-
-        // stop alarm manager
+        // fetch alarm manager
         AlarmManager manager = (AlarmManager) MainActivity.getMainActivity().getSystemService(Context.ALARM_SERVICE);
-        // fetch broadcast instance
+        // fetch broadcast receiver
         Intent intent = new Intent(MainActivity.getMainActivity(), Remote.class);
         PendingIntent pi = PendingIntent.getBroadcast(MainActivity.getMainActivity(), 0, intent, 0);
-        //
+        // stop broadcast receiver
         manager.cancel(pi);
 
         //
-        ifScanServiceStart = false;
+        ifSpeechBroadCastRunning = false;
 
         //
-        LogUtils.d("Interval", "stop, scanService end");
+        LogUtils.d("Interval", "stop, Remote end");
     }
 }

@@ -3,7 +3,6 @@ package gtzn.utils.interval;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,10 +24,9 @@ public class Remote extends BroadcastReceiver {
     private Tts tts;
     private String remoteUrl;
 
-    private Lock remoteLock = new ReentrantLock();
-
     //
     public Remote() {
+
         //
         tts = new Tts();
 
@@ -37,107 +35,115 @@ public class Remote extends BroadcastReceiver {
     }
 
     @Override
+    @PrintTimeElapseAnnotation("Remote onReceive")
     public void onReceive(final Context context, Intent intent) {
 
-        Thread thread = new Thread() {
-            @Override
-            @PrintTimeElapseAnnotation("Remote fetchPayInfo")
-            public void run() {
-                //
-                remoteLock.lock();
+        final boolean[] ifKeepRunning = {true};
 
-                //
-                URL url;
-                HttpURLConnection connection = null;
-
-                //
-                String index = Db.getBusIdentifierIndex(Interval.identifier);
-
-                //
-                try {
-
-                    String requestUrl = remoteUrl + "/ashx/GetPlayVoice.ashx?busIdentifier=" + Interval.identifier + "&index=" + index;
-
-                    // test
-                    LogUtils.d("fetchPayInfo requestUrl", requestUrl);
+        while(ifKeepRunning[0])
+        {
+            Thread thread = new Thread() {
+                @Override
+                @PrintTimeElapseAnnotation("Remote fetchPayInfo")
+                public void run() {
+                    //
+                    URL url;
+                    HttpURLConnection connection = null;
 
                     //
-                    url = new URL(requestUrl);
-                    connection = (HttpURLConnection) url.openConnection();
-                    connection.setRequestMethod("GET");
-                    connection.setConnectTimeout(2000);
-                    connection.setReadTimeout(2000);
+                    String index = Db.getBusIdentifierIndex(Interval.identifier);
 
                     //
-                    LogUtils.d("fetchPayInfo", "begin to fetch data");
+                    try {
 
-                    //
-                    InputStream in = connection.getInputStream();
+                        String requestUrl = remoteUrl + "/ashx/GetPlayVoice.ashx?busIdentifier=" + Interval.identifier + "&index=" + index;
 
-                    // read response data
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-                    StringBuilder response = new StringBuilder();
-                    String line;
-                    while ((line = reader.readLine()) != null) {
-                        response.append(line);
-                    }
+                        // test
+                        LogUtils.d("fetchPayInfo requestUrl", requestUrl);
 
-                    // test
-                    LogUtils.d("fetchPayInfo response", response.toString());
+                        //
+                        url = new URL(requestUrl);
+                        connection = (HttpURLConnection) url.openConnection();
+                        connection.setRequestMethod("GET");
+                        connection.setConnectTimeout(2000);
+                        connection.setReadTimeout(2000);
 
-                    // translate to JSON format
-                    JSONArray speechTextList = new JSONArray(response.toString());
-                    if (speechTextList.length() <= 0) {
-                        return;
-                    }
+                        //
+                        LogUtils.d("fetchPayInfo", "begin to fetch data");
 
-                    /**
-                     * alarm begin
-                     */
-                    // fetch speech text
-                    String speechText = "";
-                    for (int i = 0; i < speechTextList.length(); i++) {
-                        speechText += speechTextList.getJSONObject(i).getString("text");
-                    }
+                        //
+                        InputStream in = connection.getInputStream();
 
-                    // fetch new index
-                    int maxIndex = speechTextList.length() - 1;
-                    String newIndex = speechTextList.getJSONObject(maxIndex).getString("index");
+                        // read response data
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+                        StringBuilder response = new StringBuilder();
+                        String line;
+                        while ((line = reader.readLine()) != null) {
+                            response.append(line);
+                        }
 
-                    /**
-                     * speech
-                     */
+                        //
+                        LogUtils.d("fetchPayInfo response", response.toString());
 
-                    tts.textToSpeech(speechText);
+                        // translate to JSON format
+                        JSONArray speechTextList = new JSONArray(response.toString());
+                        if (speechTextList.length() <= 0) {
+                            return;
+                        }
 
-                    // update index
-                    Db.writeBusIdentifierIndex(Interval.identifier, newIndex);
-                } catch (MalformedURLException e) {
-                    LogUtils.e("fetchPayInfo throw exception", e.toString());
-                } catch (IOException | JSONException e) {
-                    LogUtils.e("fetchPayInfo throw exception", e.toString());
-                } catch (Exception e) {
-                    LogUtils.e("fetchPayInfo throw exception", e.toString());
-                } finally {
-                    if (connection != null) {
-                        connection.disconnect();
-                    }
+                        /**
+                         * alarm begin
+                         */
+                        // fetch speech text
+                        String speechText = "";
+                        for (int i = 0; i < speechTextList.length(); i++) {
+                            speechText += speechTextList.getJSONObject(i).getString("text");
+                        }
 
-                    //
-                    remoteLock.unlock();
+                        // fetch new index
+                        int maxIndex = speechTextList.length() - 1;
+                        String newIndex = speechTextList.getJSONObject(maxIndex).getString("index");
 
-                    // jump to scan service
-                    Intent i = new Intent(context, ScanService.class);
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        // 这是8.0以后的版本需要这样跳转
-                        context.startForegroundService(i);
-                    } else {
+                        /**
+                         * speech
+                         */
+
+                        tts.textToSpeech(speechText);
+
+                        // update index
+                        Db.writeBusIdentifierIndex(Interval.identifier, newIndex);
+                    } catch (MalformedURLException e) {
+                        LogUtils.e("fetchPayInfo throw exception", e.toString());
+                    } catch (IOException | JSONException e) {
+                        LogUtils.e("fetchPayInfo throw exception", e.toString());
+                    } catch (Exception e) {
+                        LogUtils.e("fetchPayInfo throw exception", e.toString());
+                    } finally {
+                        if (connection != null) {
+                            connection.disconnect();
+                        }
+
+                        // jump to scan service
+                        Intent i = new Intent(context, ScanService.class);
                         context.startService(i);
+
+                        //
+                        ifKeepRunning[0] = false;
                     }
                 }
-            }
-        };
+            };
 
-        thread.start();
+            thread.start();
+
+            //
+            try {
+                Thread.sleep(250);
+            } catch (InterruptedException e) {
+                LogUtils.d("onReceive Thread.sleep throw exception" , e.toString());
+            }
+        }
+
+        //
+        LogUtils.d("onReceive", "onReceive end");
     }
 }

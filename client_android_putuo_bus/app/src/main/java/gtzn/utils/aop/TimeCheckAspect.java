@@ -1,5 +1,7 @@
 package gtzn.utils.aop;
 
+import android.util.Log;
+
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -43,6 +45,9 @@ public class TimeCheckAspect {
             return;
         }
 
+        //
+        LogUtils.d("TimeCheckAspect handlePrintLog", method.getName());
+
         /**
          * fetch annotation value
          */
@@ -62,6 +67,6 @@ public class TimeCheckAspect {
 
         // 输出程序运行时间
         long endTime = System.currentTimeMillis();
-        LogUtils.d(value ,"run time：" + (endTime - startTime) + "ms");
+        LogUtils.d(value ,"************** run time **************：" + (endTime - startTime) + "ms");
     }
 }
