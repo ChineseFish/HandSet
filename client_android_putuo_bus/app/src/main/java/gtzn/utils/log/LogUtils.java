@@ -31,7 +31,7 @@ public final class LogUtils {
         }
     }
 
-    private static final int CACHE_QUEUE_SIZE = 10; // 缓存最多10条log信息后输出到文件
+    private static int cacheQueueSize = 10; // 缓存最多10条log信息后输出到文件
     private static final SimpleDateFormat LOG_DATE_TIME_FORMAT = new SimpleDateFormat("MM-dd HH:mm:ss.SSS");
 
     private static ExecutorService sLogExecutor = Executors.newSingleThreadExecutor();
@@ -39,7 +39,7 @@ public final class LogUtils {
     private static final String PREFIX = "gtzn:";
     private static boolean sLogEnable = true;
     private static LogLevel sLogLevel = LogLevel.DEBUG;
-    private static Queue<String> sMsgQueue = new ArrayBlockingQueue<>(CACHE_QUEUE_SIZE);
+    private static Queue<String> sMsgQueue = new ArrayBlockingQueue<>(cacheQueueSize + 10);
     private static LogFileManager sLogFileManager;
 
     public static void setEnable(boolean enable) {
@@ -48,6 +48,11 @@ public final class LogUtils {
 
     public static void setLogLevel(LogLevel level) {
         sLogLevel = level;
+    }
+
+    public static void setCacheQueueSize(int val)
+    {
+        cacheQueueSize = val;
     }
 
     /**
@@ -357,7 +362,7 @@ public final class LogUtils {
         String logMsg = formatLog(tag, msg);
         sMsgQueue.add(logMsg);
         // 到达缓存上限，写到文件中
-        if (sMsgQueue.size() >= CACHE_QUEUE_SIZE) {
+        if (sMsgQueue.size() >= cacheQueueSize) {
             flushLogToFile();
         }
     }

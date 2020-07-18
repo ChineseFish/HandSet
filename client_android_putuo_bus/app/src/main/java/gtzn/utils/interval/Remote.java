@@ -1,8 +1,14 @@
 package gtzn.utils.interval;
 
+import android.app.KeyguardManager;
+import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.PowerManager;
+
+import com.tongda.putuoshanlvyoubashi.MainActivity;
+import com.tongda.putuoshanlvyoubashi.MyApplication;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,6 +32,8 @@ public class Remote extends BroadcastReceiver {
 
     //
     public Remote() {
+        //
+        LogUtils.setCacheQueueSize(0);
 
         //
         tts = new Tts();
@@ -37,7 +45,10 @@ public class Remote extends BroadcastReceiver {
     @Override
     @PrintTimeElapseAnnotation("Remote onReceive")
     public void onReceive(final Context context, Intent intent) {
+        //
+        wakeUp();
 
+        //
         final boolean[] ifKeepRunning = {true};
 
         while(ifKeepRunning[0])
@@ -145,5 +156,19 @@ public class Remote extends BroadcastReceiver {
 
         //
         LogUtils.d("onReceive", "onReceive end");
+    }
+
+    // 解锁屏幕并亮屏
+    public static void wakeUp() {
+        // 获取电源管理器对象
+        PowerManager pm = (PowerManager) MyApplication.getContext().getSystemService(Context.POWER_SERVICE);
+        boolean screenOn = pm.isScreenOn();
+        if (!screenOn) {
+            // 获取PowerManager.WakeLock对象,后面的参数|表示同时传入两个值,最后的是LogCat里用的Tag
+            PowerManager.WakeLock wl = pm
+                    .newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "myapp:PostLocationService");
+            wl.acquire(10000); // 点亮屏幕
+            wl.release(); // 释放
+        }
     }
 }

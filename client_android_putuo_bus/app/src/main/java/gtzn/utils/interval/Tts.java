@@ -3,6 +3,7 @@ package gtzn.utils.interval;
 import android.speech.tts.TextToSpeech;
 
 import com.tongda.putuoshanlvyoubashi.MainActivity;
+import com.tongda.putuoshanlvyoubashi.MyApplication;
 
 import java.util.Locale;
 
@@ -36,7 +37,7 @@ public class Tts {
         {
             LogUtils.d("Tts", "init audio module");
 
-            mSpeech = new TextToSpeech(MainActivity.getMainActivity(), new TTSListener());
+            mSpeech = new TextToSpeech(MyApplication.getContext(), new TTSListener());
         }
         else
         {

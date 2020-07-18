@@ -37,6 +37,7 @@ import android.webkit.WebViewClient;
 
 import java.io.File;
 
+import androidx.annotation.RequiresApi;
 import gtzn.utils.interval.Interval;
 import gtzn.utils.interval.Tts;
 
@@ -68,9 +69,19 @@ public class MainActivity extends Activity {
     //
     private WebView webView;
 
+    @RequiresApi(api = Build.VERSION_CODES.O_MR1)
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Specifies whether an Activity should be shown on top of the lock screen
+        // whenever the lockscreen is up and the activity is resumed. Normally an
+        // activity will be transitioned to the stopped state if it is started while the
+        // lockscreen is up, but with this flag set the activity will remain in the
+        // resumed state visible on-top of the lock screen.
+        this.setShowWhenLocked(true);
+
+        //
         setContentView(R.layout.activity_main);
 
         //
