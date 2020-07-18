@@ -45,8 +45,15 @@ public class Remote extends BroadcastReceiver {
     @Override
     @PrintTimeElapseAnnotation("Remote onReceive")
     public void onReceive(final Context context, Intent intent) {
-        //
-        wakeUp();
+        // 获取电源管理器对象
+        PowerManager pm = (PowerManager) MyApplication.getContext().getSystemService(Context.POWER_SERVICE);
+
+        // PARTIAL_WAKE_LOCK:保持CPU运转，屏幕和键盘灯有可能是关闭的。
+        PowerManager.WakeLock wl = pm
+                .newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "myapp:PostLocationService");
+
+        // 点亮屏幕
+        wl.acquire();
 
         //
         final boolean[] ifKeepRunning = {true};
@@ -155,20 +162,9 @@ public class Remote extends BroadcastReceiver {
         }
 
         //
-        LogUtils.d("onReceive", "onReceive end");
-    }
+        wl.release();
 
-    // 解锁屏幕并亮屏
-    public static void wakeUp() {
-        // 获取电源管理器对象
-        PowerManager pm = (PowerManager) MyApplication.getContext().getSystemService(Context.POWER_SERVICE);
-        boolean screenOn = pm.isScreenOn();
-        if (!screenOn) {
-            // 获取PowerManager.WakeLock对象,后面的参数|表示同时传入两个值,最后的是LogCat里用的Tag
-            PowerManager.WakeLock wl = pm
-                    .newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "myapp:PostLocationService");
-            wl.acquire(10000); // 点亮屏幕
-            wl.release(); // 释放
-        }
+        //
+        LogUtils.d("onReceive", "onReceive end");
     }
 }

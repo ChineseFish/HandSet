@@ -30,6 +30,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.provider.Settings;
+import android.view.WindowManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -73,6 +74,10 @@ public class MainActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+        // when app at frontground, keep screen on
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         // Specifies whether an Activity should be shown on top of the lock screen
         // whenever the lockscreen is up and the activity is resumed. Normally an
@@ -136,6 +141,12 @@ public class MainActivity extends Activity {
 
         // add js interface
         webView.addJavascriptInterface(this, "zsgtzn");
+    }
+
+    @Override
+    protected void onResume() {
+        // when app at frontground, keep screen on
+        super.onResume();
     }
 
     /************************************************
