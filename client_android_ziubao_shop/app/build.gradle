@@ -125,4 +125,5 @@ dependencies {
 
     //
     implementation project(':debug')
+    implementation project(':printer')
 }

@@ -12,7 +12,7 @@ public class Injector {
     public static void inject() {
         //
         try {
-            GroupLoader groupLoader = (GroupLoader) Class.forName("com.tongda.delivery.MainGroupLoader").newInstance();
+            GroupLoader groupLoader = (GroupLoader) Class.forName("com.tongda.shop.MainGroupLoader").newInstance();
             Map<String, GroupLoader> moduleLoaderMap = groupLoader.injectModule();
             if (moduleLoaderMap != null) {
                 sModuleLoaderMap.putAll(moduleLoaderMap);
@@ -42,7 +42,7 @@ public class Injector {
 
         //
         try {
-            GroupLoader groupLoader = (GroupLoader) Class.forName("com.tongda.map.MainGroupLoader").newInstance();
+            GroupLoader groupLoader = (GroupLoader) Class.forName("com.tongda.printer.MainGroupLoader").newInstance();
             Map<String, GroupLoader> moduleLoaderMap = groupLoader.injectModule();
             if (moduleLoaderMap != null) {
                 sModuleLoaderMap.putAll(moduleLoaderMap);

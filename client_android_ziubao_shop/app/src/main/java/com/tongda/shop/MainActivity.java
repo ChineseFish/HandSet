@@ -21,9 +21,11 @@ package com.tongda.shop;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -36,9 +38,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
 import com.tongda.base.Constants;
+import com.tongda.base.Transfer;
 import com.tongda.base.Tts;
 import com.tongda.base.Utils;
 import com.tongda.base.log.LogUtils;
+import com.tongda.debug.DragFloatActionButton;
 
 import pub.devrel.easypermissions.EasyPermissions;
 
@@ -57,16 +61,42 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
         //
         setContentView(R.layout.activity_main);
 
+        /**
+         * Debug button
+         */
+        DragFloatActionButton mBtn = findViewById(R.id.ziubao_float_button);
+        mBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //
+                Transfer.startActivity(MainActivity.this, "ziubao_debug/main", new Intent());
+            }
+        });
+
         //
+        if(!BuildConfig.DEBUG)
+        {
+            mBtn.setVisibility(View.INVISIBLE);
+        }
+
+        /**
+         *
+         */
         Constants.init(this);
 
-        //
+        /**
+         *
+         */
         initLog();
 
-        //
+        /**
+         *
+         */
         tts = Tts.getInstance();
 
-        //
+        /**
+         *
+         */
         webView = findViewById(R.id.webView);
         // 开启 localStorage
         webView.getSettings().setDomStorageEnabled(true);
