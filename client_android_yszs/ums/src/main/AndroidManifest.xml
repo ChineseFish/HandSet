@@ -1,0 +1,12 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.tongda.ums" >
+    <meta-data
+        android:name="PPPaySDK"
+        android:value="true" />
+    <meta-data
+        android:name="CurrentEnvironment"
+        android:value="PROD" />
+
+    <uses-sdk tools:overrideLibrary="com.chinaums.pppay"/>
+</manifest>

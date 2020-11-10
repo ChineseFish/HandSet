@@ -1,0 +1,97 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf8">
+            <script language="javascript">
+             
+            function scanBankCardClick() {
+                ccb_android_js_object.scanBankCard();
+            }
+            function scanBankCardResult(result) {
+                asyncAlert(result);
+            }
+            
+            function scanIdCardFrontClick() {
+                ccb_android_js_object.scanIdCardFront();                         //身份证1为正面,2为反面
+            }
+            function scanIdCardFrontResult(result) {
+                asyncAlert(result);
+            }
+
+              function scanIdCardBackClick() {
+                ccb_android_js_object.scanIdCardBack();                         //身份证1为正面,2为反面
+            }
+            function scanIdCardBackResult(result) {
+                asyncAlert(result);
+            }
+
+            function scanFaceClick() {
+                ccb_android_js_object.scanFace(['MOUTH','NOD','YAW','BLINK']);   //'MOUTH','NOD','YAW','BLINK'4种动作
+            }
+            function scanFaceResult(msg) {
+                <!--asyncAlert(msg);-->
+                
+                var obj ={
+                    "StrUsInd_2":"2",
+                    "Cst_Nm":"龚九九",
+                    "Crdt_TpCd":"1010",
+                    "Crdt_No":"511699197703167047",
+                    "Cst_ID":"015190000103192241",
+                    "CHNL_CUST_NO":"511699197703167047",
+                    "Gnd_Cd":"",
+                    "Ethnct_Cd":"",
+                    "Brth_Dt":"",
+                    "AvlDt_Dt":"",
+                    "AvlDt_EdDt":"",
+                    "Inst_Chn_FullNm":"",
+                    "Dtl_Adr":"",
+                    "Sign_OrCd":"",
+                    "base64_Ecrp_Txn_Inf":"",
+                    "SYS_CODE":"0250",
+                    "BRANCHID":"211000000",
+                    "base64_Ecrp_Txn_Inf":""
+                }
+                var str = JSON.stringify(obj);
+                ccb_android_js_object.requestFaceInfoZX02(str);
+            }
+            
+            function requestFaceInfoResult(result) {
+                asyncAlert(result);
+            }
+            //拍完身份证后，点击下一步，保存图片
+            function saveIDCard(){
+                ccb_android_js_object.createPicture("20180112");
+            }
+
+            function createPictureResult(){
+
+            }
+
+
+            function asyncAlert(content) {
+                setTimeout(function(){
+                           alert(content);
+                           },1);
+            }
+
+             function openWebView() {
+                ccb_android_js_object.openWebView( "file:///android_asset/www/test.html");
+            }
+
+               function copyToClipboard() {
+                ccb_android_js_object.forBidScreenCap( "这是复制的内容");
+            }
+
+            </script>
+    </head>
+    <body>
+        <h1>人脸识别相关调用</h1>
+        <input type="button" value="扫描银行卡" onclick="scanBankCardClick()" />
+        <input type="button" value="扫描身份证" onclick="scanIdCardFrontClick()" />
+        <input type="button" value="扫描身份证反面" onclick="scanIdCardBackClick()" />
+        <input type="button" value="保存身份证" onclick="saveIDCard()" />
+        <input type="button" value="人脸识别" onclick="scanFaceClick()" />
+        <a href="http://www.baidu.com" target="_blank">百度一下</a>
+        <input type="button" value="start new Webview" onclick="openWebView()" />
+        <input type="button" value="禁止截屏" onclick="copyToClipboard()" />
+    </body>
+</html>
