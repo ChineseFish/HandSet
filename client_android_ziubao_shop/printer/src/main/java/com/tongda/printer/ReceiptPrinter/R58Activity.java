@@ -1,6 +1,7 @@
 package com.tongda.printer.ReceiptPrinter;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -57,7 +58,7 @@ public class R58Activity extends Activity implements View.OnClickListener {
         int id = view.getId();
 
         if (id == R.id.bt_rcp) {
-            printSample();
+            printSample(this);
         }
 
         if (id == R.id.bt_58text) {
@@ -77,25 +78,23 @@ public class R58Activity extends Activity implements View.OnClickListener {
             printBitmap();
 
         }
-
-
     }
 
     /**
      * 打印样张
      */
-    private void printSample() {
+    public static void printSample(Context context) {
         if (MainActivity.ISCONNECT) {
             MainActivity.myBinder.WriteSendData(new TaskCallback() {
                 @Override
                 public void OnSucceed() {
-                    Toast.makeText(getApplicationContext(), getString(R.string.con_success), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, context.getString(R.string.con_success), Toast.LENGTH_SHORT).show();
 
                 }
 
                 @Override
                 public void OnFailed() {
-                    Toast.makeText(getApplicationContext(), getString(R.string.con_failed), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, context.getString(R.string.con_failed), Toast.LENGTH_SHORT).show();
                 }
             }, new ProcessData() {
                 @Override
@@ -156,7 +155,7 @@ public class R58Activity extends Activity implements View.OnClickListener {
                 }
             });
         } else {
-            Toast.makeText(getApplicationContext(), getString(R.string.connect_first), Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, context.getString(R.string.connect_first), Toast.LENGTH_SHORT).show();
         }
     }
 
