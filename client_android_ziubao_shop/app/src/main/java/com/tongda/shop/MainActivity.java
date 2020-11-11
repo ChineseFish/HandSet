@@ -38,6 +38,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
 import com.tongda.base.Constants;
+import com.tongda.base.Service;
 import com.tongda.base.Transfer;
 import com.tongda.base.Tts;
 import com.tongda.base.Utils;
@@ -162,12 +163,7 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
         String[] perms =
                 {
                         Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.CALL_PHONE,
-                        Manifest.permission.READ_PHONE_STATE,
                         Manifest.permission.READ_EXTERNAL_STORAGE,
-                        Manifest.permission.ACCESS_COARSE_LOCATION,
-                        Manifest.permission.ACCESS_COARSE_LOCATION,
-                        Manifest.permission.ACCESS_FINE_LOCATION,
                         Manifest.permission.REQUEST_INSTALL_PACKAGES
                 };
 
@@ -231,5 +227,12 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
     @JavascriptInterface
     public void speechGOImmediate(String msg) {
         tts.textToSpeech(getApplicationContext(), msg);
+    }
+
+    @JavascriptInterface
+    public void printBill(String text) {
+
+        Service mainService = Transfer.obtainService("printer");
+        mainService.printer_printBill(getApplicationContext(), text);
     }
 }

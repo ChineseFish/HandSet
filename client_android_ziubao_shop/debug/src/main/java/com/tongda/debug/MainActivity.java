@@ -15,7 +15,7 @@ public class MainActivity extends Activity {
     //
     private EditText urlTextView;
     private Button jumpButton;
-    private Button bluetoothPrintButton;
+    private Button printButton;
 
     //
     public SharedPreferences mSp;
@@ -33,7 +33,7 @@ public class MainActivity extends Activity {
         //
         urlTextView = findViewById(R.id.ziubao_debug_url_textview);
         jumpButton = findViewById(R.id.ziubao_debug_jump_button);
-        bluetoothPrintButton = findViewById(R.id.ziubao_debug_bluetooth_print);
+        printButton = findViewById(R.id.ziubao_debug_printer);
 
         //
         urlTextView.setText(Db.getJumpUrl(mSp));
@@ -51,10 +51,11 @@ public class MainActivity extends Activity {
                 mainService.app_jumpToUrl(MainActivity.this, urlTextView.getText().toString());
             }
         });
-        bluetoothPrintButton.setOnClickListener(new View.OnClickListener() {
+        printButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                //
+                Transfer.startActivity(MainActivity.this, "ziubao_printer/main", new Intent());
             }
         });
     }

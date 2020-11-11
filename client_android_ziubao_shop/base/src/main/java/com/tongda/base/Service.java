@@ -11,5 +11,8 @@ public abstract class Service {
 
 
     // printer
-
+    public void printer_printBill(final Context context, String url)
+    {
+        Toast.makeText(context, "请实现这个方法", Toast.LENGTH_SHORT).show();
+    }
 }

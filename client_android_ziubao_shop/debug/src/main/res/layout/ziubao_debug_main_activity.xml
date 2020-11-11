@@ -27,8 +27,8 @@
         android:layout_marginBottom="30dp"/>
 
     <Button
-        android:id="@+id/ziubao_debug_bluetooth_print"
+        android:id="@+id/ziubao_debug_printer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="蓝牙打印" />
+        android:text="打印机" />
 </LinearLayout>

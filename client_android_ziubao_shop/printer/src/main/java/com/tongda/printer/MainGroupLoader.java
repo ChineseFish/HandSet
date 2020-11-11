@@ -23,7 +23,13 @@ public class MainGroupLoader implements GroupLoader {
 
     @Override
     public Map<String, Class<? extends Service>> injectService() {
-        return null;
+        Map<String, Class<? extends Service>> result = new HashMap<>();
+
+        //
+        result.put("printer", MainService.class);
+
+        //
+        return result;
     }
 
     @Override
