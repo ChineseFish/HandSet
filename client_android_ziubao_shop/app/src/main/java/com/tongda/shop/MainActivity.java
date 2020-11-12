@@ -31,28 +31,24 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import java.io.File;
-import java.util.List;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
 import com.tongda.base.Constants;
 import com.tongda.base.Service;
 import com.tongda.base.Transfer;
-import com.tongda.base.Tts;
 import com.tongda.base.Utils;
-import com.tongda.base.log.LogUtils;
 import com.tongda.debug.DragFloatActionButton;
+
+import java.util.List;
 
 import pub.devrel.easypermissions.EasyPermissions;
 
 public class MainActivity extends Activity implements EasyPermissions.PermissionCallbacks {
     //
-    private Tts tts = null;
-
-    //
     private static WebView webView;
+
+    private static String jumpUrl;
 
     @RequiresApi(api = Build.VERSION_CODES.O_MR1)
     @Override
@@ -79,21 +75,6 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
 //        {
 //            mBtn.setVisibility(View.INVISIBLE);
 //        }
-
-        /**
-         *
-         */
-        Constants.init(this);
-
-        /**
-         *
-         */
-        initLog();
-
-        /**
-         *
-         */
-        tts = Tts.getInstance();
 
         /**
          *
@@ -129,7 +110,15 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
             }
 
         });
-        webView.loadUrl(Constants.Home_Page);
+
+        if(jumpUrl == null || jumpUrl.equals("") )
+        {
+            webView.loadUrl(Constants.Home_Page);
+        }
+        else
+        {
+            webView.loadUrl(jumpUrl);
+        }
 
         // add js interface
         webView.addJavascriptInterface(this, "zsgtzn");
@@ -147,13 +136,32 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
 
     public static void loadUrl(String url)
     {
-        webView.loadUrl(url);
+        //
+        jumpUrl = url;
     }
 
     @Override
     protected void onResume() {
         // when app at frontground, keep screen on
         super.onResume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (webView != null) {
+            webView.removeAllViews();
+
+            //
+            try {
+                webView.destroy();
+            } catch (Throwable t) {
+
+            }
+
+            //
+            webView = null;
+        }
     }
 
     /**
@@ -177,24 +185,6 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (webView != null) {
-            webView.removeAllViews();
-
-            //
-            try {
-                webView.destroy();
-            } catch (Throwable t) {
-
-            }
-
-            //
-            webView = null;
-        }
-    }
-
-    @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
@@ -213,20 +203,12 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
     }
 
     /**
-     * log init
-     */
-    private void initLog() {
-        LogUtils.setLogDir(this.getExternalFilesDir(null) + File.separator + "app_log");
-            LogUtils.setLogLevel(LogUtils.LogLevel.DEBUG);
-    }
-
-    /**
      * speech imediate
      * @param msg
      */
     @JavascriptInterface
     public void speechGOImmediate(String msg) {
-        tts.textToSpeech(getApplicationContext(), msg);
+        MyApplication.tts.textToSpeech(getApplicationContext(), msg);
     }
 
     @JavascriptInterface

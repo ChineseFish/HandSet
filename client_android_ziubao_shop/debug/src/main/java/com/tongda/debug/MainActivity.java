@@ -52,11 +52,11 @@ public class MainActivity extends Activity {
                 Db.writeJumpUrl(mSp, urlTextView.getText().toString());
 
                 //
-                Transfer.startActivity(MainActivity.this, "app/main", new Intent());
-
-                //
                 Service mainService = Transfer.obtainService("app");
                 mainService.app_jumpToUrl(MainActivity.this, urlTextView.getText().toString());
+
+                //
+                Transfer.startActivity(MainActivity.this, "app/main", new Intent());
             }
         });
         printerSettingButton.setOnClickListener(new View.OnClickListener() {

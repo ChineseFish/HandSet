@@ -37,13 +37,13 @@ public class XyyPrinter {
     private static Context context;
 
     //
+    private static Boolean isInited = false;
+
+    //
     public static IMyBinder myBinder;
 
     //
     public static Boolean isConnected = false;
-
-    //
-    public static Boolean isInited = false;
 
     //
     public static ServiceConnection mSerconnection = new ServiceConnection() {
