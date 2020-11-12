@@ -18,6 +18,7 @@
             android:layout_width="60dp"
             android:layout_height="match_parent"
             android:layout_marginLeft="3dp"
+            android:background="@drawable/spiner_selector"
             android:entries="@array/port"
             android:spinnerMode="dropdown" />
 
@@ -49,6 +50,7 @@
         android:visibility="visible">
 
         <Button
+            style="@style/ButtonText"
             android:id="@+id/connect"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -57,6 +59,7 @@
             android:text="@string/connect" />
 
         <Button
+            style="@style/ButtonText"
             android:id="@+id/disconnect"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -83,6 +86,7 @@
         android:visibility="visible">
 
         <Button
+            style="@style/ButtonText"
             android:id="@+id/bt_pos58"
             android:layout_width="0dp"
             android:layout_height="match_parent"

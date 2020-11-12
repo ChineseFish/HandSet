@@ -4,12 +4,10 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.content.ComponentName;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,9 +23,6 @@ import android.widget.Toast;
 
 import com.tongda.printer.ReceiptPrinter.R58Activity;
 
-import net.posprinter.posprinterface.IMyBinder;
-import net.posprinter.posprinterface.TaskCallback;
-import net.posprinter.service.PosprinterService;
 import net.posprinter.utils.PosPrinterDev;
 
 import java.util.ArrayList;
@@ -36,23 +31,6 @@ import java.util.List;
 import java.util.Set;
 
 public class MainActivity extends Activity implements View.OnClickListener {
-
-
-    public static IMyBinder myBinder;
-
-    ServiceConnection mSerconnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            myBinder = (IMyBinder) service;
-            Log.e("myBinder", "connect");
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            Log.e("myBinder", "disconnect");
-        }
-    };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,9 +38,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         //
         setContentView(R.layout.ziubao_printer_main_activity);
 
-        // bind service，get imyBinder
-        Intent intent = new Intent(this, PosprinterService.class);
-        bindService(intent, mSerconnection, BIND_AUTO_CREATE);
+        XyyPrinter.init(getApplicationContext());
 
         initView();
     }
@@ -72,7 +48,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private EditText ip_adrress;
     private Button connect, disconnect, pos58;
     private int portType = 0; // 0是网络，1是蓝牙，2是USB
-    public static boolean ISCONNECT = false;
 
     private void initView() {
         port = findViewById(R.id.sp_port);
@@ -124,19 +99,19 @@ public class MainActivity extends Activity implements View.OnClickListener {
         if (id == R.id.connect) {
             switch (portType) {
                 case 0:
-                    connectNet();
+                    XyyPrinter.connectNet(getApplicationContext(), adrress.getText().toString());
                     break;
                 case 1:
-                    connectBT();
+                    XyyPrinter.connectBT(getApplicationContext(), adrress.getText().toString());
                     break;
                 case 2:
-                    connectUSB();
+                    XyyPrinter.connectUSB(getApplicationContext(), ip_adrress.getText().toString());
                     break;
             }
         }
 
         if (id == R.id.disconnect) {
-            disConnect();
+            XyyPrinter.disConnect(getApplicationContext());
         }
 
         if (id == R.id.tv_address) {
@@ -153,106 +128,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
         }
 
         if (id == R.id.bt_pos58) {
-            if (ISCONNECT) {
+            if (XyyPrinter.isConnected) {
                 Intent intent = new Intent(this, R58Activity.class);
                 startActivity(intent);
             } else {
                 Toast.makeText(getApplicationContext(), getString(R.string.connect_first), Toast.LENGTH_SHORT).show();
             }
-        }
-    }
-
-    /**
-     * 网络连接
-     */
-    private void connectNet() {
-        String ip = ip_adrress.getText().toString();
-        if (ip != null || ISCONNECT == false) {
-            myBinder.ConnectNetPort(ip, 9100, new TaskCallback() {
-                @Override
-                public void OnSucceed() {
-                    ISCONNECT = true;
-                    Toast.makeText(getApplicationContext(), getString(R.string.con_success), Toast.LENGTH_SHORT).show();
-                }
-
-                @Override
-                public void OnFailed() {
-                    ISCONNECT = false;
-                    Toast.makeText(getApplicationContext(), getString(R.string.con_failed), Toast.LENGTH_SHORT).show();
-                }
-            });
-
-        } else {
-            Toast.makeText(getApplicationContext(), getString(R.string.con_failed), Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    /**
-     * 连接蓝牙
-     */
-    private void connectBT() {
-        String BtAdress = adrress.getText().toString().trim();
-        if (BtAdress.equals(null) || BtAdress.equals("")) {
-            Toast.makeText(getApplicationContext(), getString(R.string.con_failed), Toast.LENGTH_SHORT).show();
-        } else {
-            myBinder.ConnectBtPort(BtAdress, new TaskCallback() {
-                @Override
-                public void OnSucceed() {
-                    ISCONNECT = true;
-                    Toast.makeText(getApplicationContext(), getString(R.string.con_success), Toast.LENGTH_SHORT).show();
-                }
-
-                @Override
-                public void OnFailed() {
-                    ISCONNECT = false;
-                    Toast.makeText(getApplicationContext(), getString(R.string.con_failed), Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
-    }
-
-    /**
-     * 连接usb
-     */
-    private void connectUSB() {
-        String usbAddress = adrress.getText().toString().trim();
-        if (usbAddress.equals(null) || usbAddress.equals("")) {
-            Toast.makeText(getApplicationContext(), getString(R.string.discon), Toast.LENGTH_SHORT).show();
-        } else {
-            myBinder.ConnectUsbPort(getApplicationContext(), usbAddress, new TaskCallback() {
-                @Override
-                public void OnSucceed() {
-                    ISCONNECT = true;
-                    Toast.makeText(getApplicationContext(), getString(R.string.connect), Toast.LENGTH_SHORT).show();
-                }
-
-                @Override
-                public void OnFailed() {
-                    ISCONNECT = false;
-                    Toast.makeText(getApplicationContext(), getString(R.string.discon), Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
-    }
-
-    /**
-     * 断开连接
-     */
-    private void disConnect() {
-        if (ISCONNECT) {
-            myBinder.DisconnectCurrentPort(new TaskCallback() {
-                @Override
-                public void OnSucceed() {
-                    ISCONNECT = false;
-                    Toast.makeText(getApplicationContext(), "disconnect ok", Toast.LENGTH_SHORT).show();
-                }
-
-                @Override
-                public void OnFailed() {
-                    ISCONNECT = true;
-                    Toast.makeText(getApplicationContext(), "disconnect failed", Toast.LENGTH_SHORT).show();
-                }
-            });
         }
     }
 
@@ -321,7 +202,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 ll_BtFound.setVisibility(View.VISIBLE);
             }
         });
-        //已配对的设备的点击连接
+        // 已配对的设备的点击连接
         BtBoundLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -395,7 +276,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
             btList.add("No can be matched to use bluetooth");
             BtBoudAdapter.notifyDataSetChanged();
         }
-
     }
 
 

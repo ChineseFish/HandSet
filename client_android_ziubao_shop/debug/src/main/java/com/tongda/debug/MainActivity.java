@@ -7,15 +7,21 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.tongda.base.Service;
 import com.tongda.base.Transfer;
+import com.tongda.base.Utils;
+
+import org.json.JSONException;
 
 public class MainActivity extends Activity {
     //
     private EditText urlTextView;
     private Button jumpButton;
-    private Button printButton;
+    private Button printerSettingButton;
+    private Button printerInitButton;
+    private Button printerPrintButton;
 
     //
     public SharedPreferences mSp;
@@ -33,7 +39,9 @@ public class MainActivity extends Activity {
         //
         urlTextView = findViewById(R.id.ziubao_debug_url_textview);
         jumpButton = findViewById(R.id.ziubao_debug_jump_button);
-        printButton = findViewById(R.id.ziubao_debug_printer);
+        printerSettingButton = findViewById(R.id.ziubao_debug_printer_setting);
+        printerInitButton = findViewById(R.id.ziubao_debug_printer_init);
+        printerPrintButton = findViewById(R.id.ziubao_debug_printer_print);
 
         //
         urlTextView.setText(Db.getJumpUrl(mSp));
@@ -51,11 +59,29 @@ public class MainActivity extends Activity {
                 mainService.app_jumpToUrl(MainActivity.this, urlTextView.getText().toString());
             }
         });
-        printButton.setOnClickListener(new View.OnClickListener() {
+        printerSettingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //
                 Transfer.startActivity(MainActivity.this, "ziubao_printer/main", new Intent());
+            }
+        });
+
+        printerInitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //
+                Service printService = Transfer.obtainService("printer");
+                printService.printer_init(MainActivity.this);
+            }
+        });
+
+        printerPrintButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //
+                Service printService = Transfer.obtainService("printer");
+                printService.printer_printBill(MainActivity.this, Utils.getJson(getApplicationContext(), "printContent.json"));
             }
         });
     }

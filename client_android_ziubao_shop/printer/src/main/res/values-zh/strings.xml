@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="port">
+        <item>网络</item>
+        <item>蓝牙</item>
+        <item>USB</item>
+    </string-array>
+
+    <string name="connect">连接</string>
+    <string name="discon">断开</string>
+    <string name="hint">Please input IP</string>
+    <string name="usb_pre_con">present connected Usb dev:</string>
+    <string name="con_success">连接成功</string>
+    <string name="con_failed">连接失败</string>
+    <string name="connect_first">please connet the printer first!</string>
+    <string name="l58">58</string>
+    <string name="terminal">票据打印机</string>
+    <string name="please_device">请选择设备</string>
+
+    <string name="none_ble_device">no devices are found</string>
+
+    <string name="sample">样张</string>
+    <string name="print_text">打印文本</string>
+    <string name="print_barcode">一维条码</string>
+    <string name="print_qrcode">二维条码</string>
+    <string name="print_bitmap">光栅位图</string>
+</resources>

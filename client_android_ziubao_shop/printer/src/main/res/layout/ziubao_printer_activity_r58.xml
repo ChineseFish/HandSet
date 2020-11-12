@@ -8,30 +8,35 @@
     tools:context=".ReceiptPrinter.R58Activity">
 
     <Button
+        style="@style/ButtonText"
         android:id="@+id/bt_rcp"
         android:layout_margin="15dp"
         android:text="@string/sample"
         android:layout_width="match_parent"
         android:layout_height="45dp" />
     <Button
+        style="@style/ButtonText"
         android:id="@+id/bt_58text"
         android:layout_margin="15dp"
         android:text="@string/print_text"
         android:layout_width="match_parent"
         android:layout_height="45dp" />
     <Button
+        style="@style/ButtonText"
         android:id="@+id/bt_58barcode"
         android:layout_margin="15dp"
         android:text="@string/print_barcode"
         android:layout_width="match_parent"
         android:layout_height="45dp" />
     <Button
+        style="@style/ButtonText"
         android:id="@+id/bt_58qr"
         android:layout_margin="15dp"
         android:text="@string/print_qrcode"
         android:layout_width="match_parent"
         android:layout_height="45dp" />
     <Button
+        style="@style/ButtonText"
         android:id="@+id/bt_58bitmap"
         android:layout_margin="15dp"
         android:text="@string/print_bitmap"

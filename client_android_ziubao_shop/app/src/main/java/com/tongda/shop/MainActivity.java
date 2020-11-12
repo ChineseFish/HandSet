@@ -74,11 +74,12 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
             }
         });
 
-        //
-        if(!BuildConfig.DEBUG)
-        {
-            mBtn.setVisibility(View.INVISIBLE);
-        }
+//        //
+//        if(!BuildConfig.DEBUG)
+//        {
+//            mBtn.setVisibility(View.INVISIBLE);
+//        }
+        mBtn.setVisibility(View.INVISIBLE);
 
         /**
          *
@@ -230,8 +231,21 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
     }
 
     @JavascriptInterface
-    public void printBill(String text) {
+    public void printerSetting() {
+        //
+        Transfer.startActivity(this, "ziubao_printer/main", new Intent());
+    }
 
+    @JavascriptInterface
+    public void printerInit() {
+        //
+        Service printService = Transfer.obtainService("printer");
+        printService.printer_init(this);
+    }
+
+    @JavascriptInterface
+    public void printBill(String text) {
+        //
         Service mainService = Transfer.obtainService("printer");
         mainService.printer_printBill(getApplicationContext(), text);
     }

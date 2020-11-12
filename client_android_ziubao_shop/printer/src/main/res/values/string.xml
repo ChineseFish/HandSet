@@ -6,7 +6,6 @@
         <item>USB</item>
     </string-array>
 
-
     <string name="connect">Connect </string>
     <string name="discon">disConnect</string>
     <string name="hint">Please input IP</string>

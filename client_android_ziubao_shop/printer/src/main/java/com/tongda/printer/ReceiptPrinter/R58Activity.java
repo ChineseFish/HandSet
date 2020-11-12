@@ -1,16 +1,18 @@
 package com.tongda.printer.ReceiptPrinter;
 
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.tongda.base.Utils;
 import com.tongda.printer.MainActivity;
 import com.tongda.printer.R;
+import com.tongda.printer.XyyPrinter;
 
 import net.posprinter.posprinterface.ProcessData;
 import net.posprinter.posprinterface.TaskCallback;
@@ -19,6 +21,10 @@ import net.posprinter.utils.BitmapToByteData;
 import net.posprinter.utils.DataForSendToPrinterPos58;
 import net.posprinter.utils.DataForSendToPrinterPos80;
 import net.posprinter.utils.StringUtils;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +64,29 @@ public class R58Activity extends Activity implements View.OnClickListener {
         int id = view.getId();
 
         if (id == R.id.bt_rcp) {
-            printSample(this);
+            Thread printBillThread = new Thread(new Runnable() {
+
+                @Override
+                public void run() {
+                    //
+                    Looper.prepare();
+
+                    //
+                    String content = Utils.getJson(getApplicationContext(), "printContent.json");
+
+                    //
+                    try {
+                        printBill(new JSONArray(content));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    //
+                    Looper.loop();
+                }
+            });
+
+            printBillThread.start();
         }
 
         if (id == R.id.bt_58text) {
@@ -81,81 +109,102 @@ public class R58Activity extends Activity implements View.OnClickListener {
     }
 
     /**
-     * 打印样张
+     * 打印消费单
      */
-    public static void printSample(Context context) {
-        if (MainActivity.ISCONNECT) {
-            MainActivity.myBinder.WriteSendData(new TaskCallback() {
+    public void printBill(JSONArray content)
+    {
+        if (XyyPrinter.isConnected) {
+            XyyPrinter.myBinder.WriteSendData(new TaskCallback() {
                 @Override
                 public void OnSucceed() {
-                    Toast.makeText(context, context.getString(R.string.con_success), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), getString(R.string.con_success), Toast.LENGTH_SHORT).show();
 
                 }
 
                 @Override
                 public void OnFailed() {
-                    Toast.makeText(context, context.getString(R.string.con_failed), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), getString(R.string.con_failed), Toast.LENGTH_SHORT).show();
                 }
             }, new ProcessData() {
                 @Override
                 public List<byte[]> processDataBeforeSend() {
+                    //
                     List<byte[]> list = new ArrayList<>();
-                    list.add(DataForSendToPrinterPos58.initializePrinter());
-                    list.add(DataForSendToPrinterPos58.setAbsolutePrintPosition(50, 00));//设置初始位置
-                    list.add(DataForSendToPrinterPos58.selectCharacterSize(17));//字体放大一倍
-                    list.add(StringUtils.strTobytes("商品"));
-                    list.add(DataForSendToPrinterPos58.setAbsolutePrintPosition(250, 00));
-                    list.add(StringUtils.strTobytes("价格"));
-                    list.add(DataForSendToPrinterPos58.printAndFeedLine());
-                    list.add(DataForSendToPrinterPos58.printAndFeedLine());
 
-                    list.add(DataForSendToPrinterPos58.initializePrinter());
-                    list.add(DataForSendToPrinterPos58.setAbsolutePrintPosition(30, 00));
-                    list.add(StringUtils.strTobytes("黄焖鸡"));
-                    list.add(DataForSendToPrinterPos58.setAbsolutePrintPosition(220, 00));
-                    list.add(StringUtils.strTobytes("5元"));
-                    list.add(DataForSendToPrinterPos58.printAndFeedLine());
+                    //
+                    try
+                    {
+                        //
+                        for(int i = 0; i < content.length(); i ++)
+                        {
+                            //
+                            JSONObject line = content.getJSONObject(i);
 
-                    list.add(DataForSendToPrinterPos58.initializePrinter());
-                    list.add(DataForSendToPrinterPos58.setAbsolutePrintPosition(30, 00));
-                    list.add(StringUtils.strTobytes("黄焖鸡呀"));
-                    list.add(DataForSendToPrinterPos58.setAbsolutePrintPosition(220, 00));
-                    list.add(StringUtils.strTobytes("6元"));
-                    list.add(DataForSendToPrinterPos58.printAndFeedLine());
+                            // fetch line type
+                            String type = line.getString("type");
 
-                    list.add(DataForSendToPrinterPos58.initializePrinter());
-                    list.add(DataForSendToPrinterPos58.setAbsolutePrintPosition(30, 00));
-                    list.add(StringUtils.strTobytes("黄焖鸡"));
-                    list.add(DataForSendToPrinterPos58.setAbsolutePrintPosition(220, 00));
-                    list.add(StringUtils.strTobytes("7元"));
-                    list.add(DataForSendToPrinterPos58.printAndFeedLine());
+                            // init printer
+                            list.add(DataForSendToPrinterPos58.initializePrinter());
 
-                    list.add(DataForSendToPrinterPos58.initializePrinter());
-                    list.add(DataForSendToPrinterPos58.setAbsolutePrintPosition(30, 00));
-                    list.add(StringUtils.strTobytes("黄焖鸡"));
-                    list.add(DataForSendToPrinterPos58.setAbsolutePrintPosition(220, 00));
-                    list.add(StringUtils.strTobytes("8元"));
-                    list.add(DataForSendToPrinterPos58.printAndFeedLine());
+                            //
+                            if(type.equals("text"))
+                            {
+                                //
+                                JSONArray lineDetail = line.getJSONArray("content");
 
-                    list.add(DataForSendToPrinterPos58.initializePrinter());
-                    list.add(DataForSendToPrinterPos58.setAbsolutePrintPosition(30, 00));
-                    list.add(StringUtils.strTobytes("黄焖鸡"));
-                    list.add(DataForSendToPrinterPos58.setAbsolutePrintPosition(220, 00));
-                    list.add(StringUtils.strTobytes("9元"));
-                    list.add(DataForSendToPrinterPos58.printAndFeedLine());
+                                //
+                                for(int j = 0; j < lineDetail.length(); j ++)
+                                {
+                                    JSONObject item = lineDetail.getJSONObject(j);
 
-                    list.add(DataForSendToPrinterPos58.initializePrinter());
-                    list.add(DataForSendToPrinterPos58.setAbsolutePrintPosition(30, 00));
-                    list.add(StringUtils.strTobytes("黄焖鸡"));
-                    list.add(DataForSendToPrinterPos58.setAbsolutePrintPosition(220, 00));
-                    list.add(StringUtils.strTobytes("10元"));
-                    list.add(DataForSendToPrinterPos58.printAndFeedLine());
+                                    //
+                                    int posM = item.getInt("posM");
+                                    int posN = item.getInt("posN");
+                                    int charSize = item.getInt("charSize");
+                                    String text = item.getString("text");
 
+                                    //
+                                    list.add(DataForSendToPrinterPos58.setAbsolutePrintPosition(posM, posN)); // 设置初始位置
+                                    list.add(DataForSendToPrinterPos58.selectCharacterSize(charSize)); // 设置字体大小
+                                    list.add(StringUtils.strTobytes(text)); // 设置打印内容
+                                }
+                            }
+                            else if(type.equals("bitmap"))
+                            {
+                                //
+                                String url = line.getString("url");
+
+                                // fetch bitmap
+                                Bitmap bitmap = Utils.getBitmap(url);
+
+                                // 按照你给定的宽度来压缩图片 图片宽度大于给定的宽度则压缩, 否则不压缩
+                                bitmap = BitmapProcess.compressBmpByYourWidth(bitmap, 300);
+
+                                // 切割图片方法, 等高切割图片, 返回List
+                                List<Bitmap> blist = BitmapProcess.cutBitmap(50, bitmap);
+                                for (int j = 0; j < blist.size(); j++) {
+                                    list.add(DataForSendToPrinterPos80.printRasterBmp(0, blist.get(j), BitmapToByteData.BmpType.Threshold, BitmapToByteData.AlignType.Center, 384));
+                                }
+                            }
+                            else if(type.equals("newLine"))
+                            {
+
+                            }
+
+                            // 打印并换行
+                            list.add(DataForSendToPrinterPos58.printAndFeedLine());
+                        }
+                    } catch (JSONException e)
+                    {
+                        Toast.makeText(getApplicationContext(), "打印数据解析出现错误, " + e.toString(), Toast.LENGTH_SHORT).show();
+                    }
+
+                    //
                     return list;
                 }
             });
         } else {
-            Toast.makeText(context, context.getString(R.string.connect_first), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.connect_first), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -164,8 +213,8 @@ public class R58Activity extends Activity implements View.OnClickListener {
      */
     private void printText() {
 
-        if (MainActivity.ISCONNECT) {
-            MainActivity.myBinder.WriteSendData(new TaskCallback() {
+        if (XyyPrinter.isConnected) {
+            XyyPrinter.myBinder.WriteSendData(new TaskCallback() {
                 @Override
                 public void OnSucceed() {
                     Toast.makeText(getApplicationContext(), getString(R.string.con_success), Toast.LENGTH_SHORT).show();
@@ -196,8 +245,8 @@ public class R58Activity extends Activity implements View.OnClickListener {
      * 打印一维条码
      */
     private void printBarcode() {
-        if (MainActivity.ISCONNECT) {
-            MainActivity.myBinder.WriteSendData(new TaskCallback() {
+        if (XyyPrinter.isConnected) {
+            XyyPrinter.myBinder.WriteSendData(new TaskCallback() {
                 @Override
                 public void OnSucceed() {
                     Toast.makeText(getApplicationContext(), getString(R.string.con_success), Toast.LENGTH_SHORT).show();
@@ -238,8 +287,8 @@ public class R58Activity extends Activity implements View.OnClickListener {
      * 打印二维条码
      */
     private void printqr() {
-        if (MainActivity.ISCONNECT) {
-            MainActivity.myBinder.WriteSendData(new TaskCallback() {
+        if (XyyPrinter.isConnected) {
+            XyyPrinter.myBinder.WriteSendData(new TaskCallback() {
                 @Override
                 public void OnSucceed() {
                     Toast.makeText(getApplicationContext(), getString(R.string.con_success), Toast.LENGTH_SHORT).show();
@@ -271,10 +320,10 @@ public class R58Activity extends Activity implements View.OnClickListener {
     private void printBitmap() {
 
         final Bitmap bitmap1 = BitmapProcess.compressBmpByYourWidth
-                (BitmapFactory.decodeResource(getResources(), R.drawable.test), 300);
+                (BitmapFactory.decodeResource(getResources(), R.drawable.bitmap), 300);
 
-        if (MainActivity.ISCONNECT) {
-            MainActivity.myBinder.WriteSendData(new TaskCallback() {
+        if (XyyPrinter.isConnected) {
+            XyyPrinter.myBinder.WriteSendData(new TaskCallback() {
                 @Override
                 public void OnSucceed() {
                     Toast.makeText(getApplicationContext(), getString(R.string.con_success), Toast.LENGTH_SHORT).show();
