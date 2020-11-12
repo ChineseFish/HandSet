@@ -1,0 +1,59 @@
+// 配置打印机连接（目前只支持蓝牙）
+zsgtzn.printerSetting()
+
+// 打印机配置完成之后，以后每次重启app只需要调用这个函数，app会自动连接最近一次连接成功的打印机
+zsgtzn.printerInit()
+
+// 打印
+zsgtzn.printBill(String jsonString)
+
+jsonString example
+[
+  {
+    "type": "text",
+    "content": [ // 注意！！content中的内容会打印在同一行
+      {
+        "posM": 30,
+        "posN": 0, // posM，posN，posM+posN*256代表距离行首位置，范围0-255
+        "charSize": 10, // 范围0-255；n的0到3位设定字符高度，4-7位用来设定字符宽度
+        "text": "鸡鸡" // 打印的文字
+      },
+      {
+        "posM": 220,
+        "posN": 0,
+        "charSize": 10,
+        "text": "鸡鸡"
+      }
+    ]
+  },
+  {
+    "type": "text",
+    "content": [
+      {
+        "posM": 30,
+        "posN": 0,
+        "charSize": 17,
+        "text": "鸡鸡"
+      },
+      {
+        "posM": 220,
+        "posN": 0,
+        "charSize": 17,
+        "text": "鸡鸡"
+      }
+    ]
+  },
+  {
+    "type": "newLine" // 换行
+  },
+  {
+    "type": "newLine"
+  },
+  {
+    "type": "newLine"
+  },
+  {
+    "type": "bitmap",
+    "url": "https://zyb.ziubao.com/static/htmls/images/rush.png" // png照片的位置
+  }
+]

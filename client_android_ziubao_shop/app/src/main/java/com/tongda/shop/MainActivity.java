@@ -79,7 +79,6 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
 //        {
 //            mBtn.setVisibility(View.INVISIBLE);
 //        }
-        mBtn.setVisibility(View.INVISIBLE);
 
         /**
          *
