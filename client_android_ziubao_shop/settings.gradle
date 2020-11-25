@@ -1,5 +1,0 @@
-include ':printer'
-rootProject.name='shop'
-include ':app'
-include ':debug'
-include ':base'
