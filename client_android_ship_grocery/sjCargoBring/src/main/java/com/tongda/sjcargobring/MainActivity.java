@@ -17,7 +17,7 @@
        under the License.
  */
 
-package com.tongda.shipgrocery;
+package com.tongda.sjcargobring;
 
 import android.Manifest;
 import android.app.Activity;
@@ -93,7 +93,7 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
                 return true;
             }
         });
-        webView.loadUrl("https://yds.ziubao.com/xmb/");
+        webView.loadUrl("https://sjwh.ziubao.com/sjwh/");
 
         //
         initLog();

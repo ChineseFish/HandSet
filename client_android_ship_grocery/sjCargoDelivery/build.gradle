@@ -61,7 +61,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.tongda.shipgrocery"
+        applicationId "com.tongda.sjcargodelivery"
         minSdkVersion 16
         targetSdkVersion 29
         versionCode 1

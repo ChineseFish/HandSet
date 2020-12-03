@@ -1,2 +1,5 @@
+include ':sjcargodelivery'
+include ':sjcargobring'
+include ':base'
 rootProject.name='shipgrocery'
 include ':app'

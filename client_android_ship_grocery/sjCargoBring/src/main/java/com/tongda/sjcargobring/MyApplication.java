@@ -1,4 +1,4 @@
-package com.tongda.shipgrocery;
+package com.tongda.sjcargobring;
 
 import android.app.Application;
 import android.content.Context;
