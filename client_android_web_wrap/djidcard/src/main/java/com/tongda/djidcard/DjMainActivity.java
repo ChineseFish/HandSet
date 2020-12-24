@@ -20,7 +20,6 @@ import android.nfc.tech.NfcA;
 import android.nfc.tech.NfcB;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Looper;
 import android.util.Log;
 import android.webkit.ValueCallback;
 import android.webkit.WebView;

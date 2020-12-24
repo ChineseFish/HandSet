@@ -95,7 +95,7 @@ public class MainActivity extends DjMainActivity implements EasyPermissions.Perm
                 return true;
             }
         });
-        webView.loadUrl("https://yds.ziubao.com/xmb/");
+        webView.loadUrl("https://sjbp.ziubao.com/");
 
         //
         initLog();
