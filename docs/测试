@@ -1,2 +1,7 @@
 东集 安卓机
 密码 4007770876
+
+function djidcardResult(idCard)
+{
+    console.log("***************** idCard: " + idCard);
+}

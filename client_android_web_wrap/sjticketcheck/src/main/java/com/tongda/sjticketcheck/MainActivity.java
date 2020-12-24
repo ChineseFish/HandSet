@@ -43,9 +43,6 @@ import com.tongda.djidcard.DjMainActivity;
 import pub.devrel.easypermissions.EasyPermissions;
 
 public class MainActivity extends DjMainActivity implements EasyPermissions.PermissionCallbacks {
-    //
-    private WebView webView;
-
     @RequiresApi(api = Build.VERSION_CODES.O_MR1)
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,6 +53,10 @@ public class MainActivity extends DjMainActivity implements EasyPermissions.Perm
 
         //
         webView = findViewById(R.id.webView);
+        //
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            WebView.setWebContentsDebuggingEnabled(true);
+        }
         // 开启 localStorage
         webView.getSettings().setDomStorageEnabled(true);
         // 设置支持javascript

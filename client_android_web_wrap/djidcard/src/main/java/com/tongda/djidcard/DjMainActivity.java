@@ -18,11 +18,16 @@ import android.nfc.tech.IsoDep;
 import android.nfc.tech.MifareClassic;
 import android.nfc.tech.NfcA;
 import android.nfc.tech.NfcB;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
+import android.webkit.ValueCallback;
+import android.webkit.WebView;
 import android.widget.Toast;
 import android.os.Build.VERSION;
+
+import androidx.annotation.RequiresApi;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -59,6 +64,9 @@ public class DjMainActivity extends Activity implements ILotusCallBack {
 
 
     private static final String Activity_TAG = "djidcard";
+
+    //
+    protected WebView webView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -301,6 +309,21 @@ public class DjMainActivity extends Activity implements ILotusCallBack {
                             temp = new String(tTwoIdInfo.arrTwoIdNo, 0, 36,
                                     "UTF-16LE").trim();
                             AddLog("身份证号码:" + temp);
+
+                            //
+                            final String cardId = temp;
+                            runOnUiThread(new Runnable() {
+                                  @Override
+                                  public void run() {
+                                      webView.evaluateJavascript(String.format("javascript:djidcardResult('%s')", cardId), new ValueCallback<String>() {
+                                          @Override
+                                          public void onReceiveValue(String value) {
+                                              // 此处为 js 返回的结果
+                                          }
+                                      });
+                                  }
+                            });
+
                             // 签发机关
                             temp = new String(
                                     tTwoIdInfo.arrTwoIdSignedDepartment, 0, 30,
@@ -355,6 +378,7 @@ public class DjMainActivity extends Activity implements ILotusCallBack {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     protected void onNewIntent(Intent intent) {
         // TODO Auto-generated method stub
         super.onNewIntent(intent);
@@ -455,6 +479,21 @@ public class DjMainActivity extends Activity implements ILotusCallBack {
                             temp = new String(tTwoIdInfo.arrTwoIdNo, 0, 36,
                                     "UTF-16LE").trim();
                             AddLog("身份证号码:" + temp);
+
+                            //
+                            final String cardId = temp;
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    webView.evaluateJavascript(String.format("javascript:djidcardResult('%s')", cardId), new ValueCallback<String>() {
+                                        @Override
+                                        public void onReceiveValue(String value) {
+                                            // 此处为 js 返回的结果
+                                        }
+                                    });
+                                }
+                            });
+
                             // 签发机关
                             temp = new String(
                                     tTwoIdInfo.arrTwoIdSignedDepartment, 0, 30,
