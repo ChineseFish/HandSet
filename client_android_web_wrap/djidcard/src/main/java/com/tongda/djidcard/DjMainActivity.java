@@ -3,7 +3,6 @@ package com.tongda.djidcard;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
@@ -20,20 +19,12 @@ import android.nfc.tech.MifareClassic;
 import android.nfc.tech.NfcA;
 import android.nfc.tech.NfcB;
 import android.os.Bundle;
-import android.telephony.TelephonyManager;
+import android.os.Looper;
 import android.util.Log;
-import android.widget.EditText;
 import android.widget.Toast;
 import android.os.Build.VERSION;
 
-import android.os.Handler;
-import android.os.Message;
-
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.LineNumberReader;
-import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 
@@ -44,15 +35,11 @@ public class DjMainActivity extends Activity implements ILotusCallBack {
     private UsbEndpoint m_InEndpoint = null;
     private UsbEndpoint m_OutEndpoint = null;
 
-    private final static char[] HEX = {'0', '1', '2', '3', '4', '5', '6', '7',
-            '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
-
     private LotusCardDriver mLotusCardDriver;
     private NfcAdapter m_NfcAdpater;
     private PendingIntent pendingIntent;
     private IntentFilter[] mFilters;
     private String[][] mTechLists;
-    private Handler m_Handler = null;
     private Activity m_MainActivity = null;
 
     private UsbManager m_UsbManager = null;
@@ -71,62 +58,7 @@ public class DjMainActivity extends Activity implements ILotusCallBack {
     private int m_nCommandInex = 0;
 
 
-    private static final String Activity_TAG = "IdDemo";
-
-    /**
-     * 获取手机的MAC地址
-     *
-     * @return
-     */
-    public static String getMac() {
-        String str = "";
-        String macSerial = "";
-        try {
-            Process pp = Runtime.getRuntime().exec(
-                    "cat /sys/class/net/wlan0/address ");
-            InputStreamReader ir = new InputStreamReader(pp.getInputStream());
-            LineNumberReader input = new LineNumberReader(ir);
-
-            for (; null != str; ) {
-                str = input.readLine();
-                if (str != null) {
-                    macSerial = str.trim(); // 去空格
-                    break;
-                }
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        if (macSerial == null || "".equals(macSerial)) {
-            try {
-                return loadFileAsString("/sys/class/net/eth0/address")
-                        .toUpperCase().substring(0, 17);
-            } catch (Exception e) {
-                e.printStackTrace();
-
-            }
-
-        }
-        return macSerial;
-    }
-
-    public static String loadFileAsString(String fileName) throws Exception {
-        FileReader reader = new FileReader(fileName);
-        String text = loadReaderAsString(reader);
-        reader.close();
-        return text;
-    }
-
-    public static String loadReaderAsString(Reader reader) throws Exception {
-        StringBuilder builder = new StringBuilder();
-        char[] buffer = new char[4096];
-        int readLength = reader.read(buffer);
-        while (readLength >= 0) {
-            builder.append(buffer, 0, readLength);
-            readLength = reader.read(buffer);
-        }
-        return builder.toString();
-    }
+    private static final String Activity_TAG = "djidcard";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,6 +66,10 @@ public class DjMainActivity extends Activity implements ILotusCallBack {
 
         //
         m_MainActivity = this;
+
+        /**
+         * 初始化NFC
+         */
         try {
             m_NfcAdpater = NfcAdapter.getDefaultAdapter(this);
             if (m_NfcAdpater == null) {
@@ -148,9 +84,15 @@ public class DjMainActivity extends Activity implements ILotusCallBack {
                     Toast.LENGTH_SHORT).show();
         }
 
-        //
+        /**
+         *
+         */
         pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this,
                 getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+
+        /**
+         * 设置NFC
+         */
         IntentFilter ndef = new IntentFilter(NfcAdapter.ACTION_TECH_DISCOVERED);
         ndef.addCategory("*/*");
         // 过滤器
@@ -163,24 +105,22 @@ public class DjMainActivity extends Activity implements ILotusCallBack {
                 new String[]{NfcA.class.getName()}
         };
 
-        // 设置USB读写回调 串口可以不用此操作
+        /**
+         * 设置USB读写回调 串口可以不用此操作
+         */
         m_bCanUseUsbHostApi = SetUsbCallBack();
         if (m_bCanUseUsbHostApi) {
-            AddLog("Find  IC Reader!");
+            AddLog("Find IC Reader!");
             AddLog("Device Node:" + m_strDeviceNode);
         } else {
             AddLog("Not Find  IC Reader!");
         }
 
+        /**
+         * 初始化东集身份证驱动
+         */
         mLotusCardDriver = new LotusCardDriver();
-
         mLotusCardDriver.m_lotusCallBack = this;
-        m_Handler = new Handler() {
-            public void handleMessage(Message msg) {
-                AddLog(msg.obj.toString());
-                super.handleMessage(msg);
-            }
-        };
 
         // 区分系统版本
         m_nSystemVersion = Integer.parseInt(VERSION.SDK);
@@ -198,7 +138,11 @@ public class DjMainActivity extends Activity implements ILotusCallBack {
     protected void onResume() {
         // TODO Auto-generated method stub
         super.onResume();
-        Log.i(Activity_TAG, "This is Information");
+
+        //
+        Log.i(Activity_TAG, "onResume");
+
+        //
         if (m_NfcAdpater != null) {
             m_NfcAdpater.enableForegroundDispatch(this, pendingIntent, mFilters,
                     mTechLists);
@@ -210,6 +154,10 @@ public class DjMainActivity extends Activity implements ILotusCallBack {
     protected void onPause() {
         super.onPause();
 
+        //
+        Log.i(Activity_TAG, "onPause");
+
+        //
         if (m_NfcAdpater != null) {
             m_NfcAdpater.disableForegroundDispatch(this);
             disableReaderMode();
@@ -218,12 +166,18 @@ public class DjMainActivity extends Activity implements ILotusCallBack {
 
     @TargetApi(19)
     private void enableReaderMode() {
-        if (m_nSystemVersion < 19)
+        if (m_nSystemVersion < 19) {
             return;
+        }
+
+        //
         Bundle options = new Bundle();
         options.putInt(NfcAdapter.EXTRA_READER_PRESENCE_CHECK_DELAY, 5000);
-        //int READER_FLAGS = NfcAdapter.FLAG_READER_NFC_A | NfcAdapter.FLAG_READER_SKIP_NDEF_CHECK;
+
+        //
         int READER_FLAGS = NfcAdapter.FLAG_READER_NFC_A | NfcAdapter.FLAG_READER_NFC_B | NfcAdapter.FLAG_READER_SKIP_NDEF_CHECK;
+
+        //
         if (m_NfcAdpater != null) {
             m_NfcAdpater.enableReaderMode(this, new IdReaderCallback(), READER_FLAGS, options);
         }
@@ -243,7 +197,6 @@ public class DjMainActivity extends Activity implements ILotusCallBack {
             byte[] arrRequest = new byte[3];
             byte[] arrSelect = new byte[9];
             byte[] arrResult;
-            byte[] arrBmpAndWl = null;
             arrRequest[0] = (byte) 0x5;
             arrRequest[1] = (byte) 0x0;
             arrRequest[2] = (byte) 0x0;
@@ -413,9 +366,11 @@ public class DjMainActivity extends Activity implements ILotusCallBack {
         Log.d(Activity_TAG, intent.getAction());
         Log.i(Activity_TAG, "onNewIntent");
         if (m_nSystemVersion >= 19)
+        {
             return;
+        }
 
-
+        //
         if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(intent.getAction())) {
             Tag tagFromIntent = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
             NfcB nfcbId = NfcB.get(tagFromIntent);
@@ -448,7 +403,8 @@ public class DjMainActivity extends Activity implements ILotusCallBack {
                         return;
                     }
                     AddLog("Call GetTwoIdInfoByMcuServer Ok!");
-                    //处理照片
+
+                    // 处理照片
                     if (0x00 == tTwoIdInfo.unTwoIdPhotoJpegLength) {
                         bWlDecodeResult = mLotusCardDriver.WlDecodeByServer(m_nDeviceHandle, "119.29.18.30", tTwoIdInfo);
                         if (!bWlDecodeResult) {
@@ -719,31 +675,6 @@ public class DjMainActivity extends Activity implements ILotusCallBack {
         return nation;
     }
 
-    public String toHexString(byte[] d, int s, int n) {
-        final char[] ret = new char[n * 2];
-        final int e = s + n;
-
-        int x = 0;
-        for (int i = s; i < e; ++i) {
-            final byte v = d[i];
-            ret[x++] = HEX[0x0F & (v >> 4)];
-            ret[x++] = HEX[0x0F & v];
-        }
-        return new String(ret);
-    }
-
-    public String toHexStringR(byte[] d, int s, int n) {
-        final char[] ret = new char[n * 2];
-
-        int x = 0;
-        for (int i = s + n - 1; i >= s; --i) {
-            final byte v = d[i];
-            ret[x++] = HEX[0x0F & (v >> 4)];
-            ret[x++] = HEX[0x0F & v];
-        }
-        return new String(ret);
-    }
-
     public boolean callBackExtendIdDeviceProcess(Object objUser,
                                                  byte[] arrBuffer) {
         // TODO Auto-generated method stub
@@ -781,10 +712,15 @@ public class DjMainActivity extends Activity implements ILotusCallBack {
                 bResult = true;
             }
 
+            // 应当对加载动画
+
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
             AddLog(e.getMessage());
+            
+            //
+            Log.i(Activity_TAG, "身份证扫描失败, 请拿开身份证重新进行扫描");
         }
         return bResult;
     }
@@ -856,7 +792,7 @@ public class DjMainActivity extends Activity implements ILotusCallBack {
             return false;
         if (null == m_InEndpoint)
             return false;
-        //AddLog("callBackReadWriteProcess nBufferLength:" + nBufferLength);
+
         if (nBufferLength < 65)
             return false;
         if (true == bRead) {
@@ -867,7 +803,7 @@ public class DjMainActivity extends Activity implements ILotusCallBack {
                 if (nResult <= 0)
                     break;
                 if (arrBuffer[0] != 0) {
-                    //此处调整一下
+                    // 此处调整一下
                     System.arraycopy(arrBuffer, 0, arrBuffer, 1, nResult);
                     arrBuffer[0] = (byte) nResult;
                     break;
@@ -893,5 +829,4 @@ public class DjMainActivity extends Activity implements ILotusCallBack {
         }
         return bResult;
     }
-
 }
