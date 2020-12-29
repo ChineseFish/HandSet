@@ -61,10 +61,10 @@ public class MainActivity extends DjMainActivity implements EasyPermissions.Perm
         webView.getSettings().setDomStorageEnabled(true);
         // 设置支持javascript
         webView.getSettings().setJavaScriptEnabled(true);
-        // 启动缓存
-        webView.getSettings().setAppCacheEnabled(true);
-        // 设置缓存模式
-        webView.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
+//        // 启动缓存
+//        webView.getSettings().setAppCacheEnabled(true);
+//        // 设置缓存模式
+//        webView.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
         //
         webView.getSettings().setLoadWithOverviewMode(true);
         // 开启视口模式
