@@ -19,3 +19,14 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# 保留annotation， 例如 @JavascriptInterface 等 annotation
+-keepattributes *Annotation*
+
+# 保留跟javascript相关的属性
+-keepattributes JavascriptInterface
+
+# 保留JavascriptInterface中的方法
+-keepclassmembers class * {
+    @android.webkit.JavascriptInterface <methods>;
+}
