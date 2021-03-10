@@ -470,8 +470,13 @@ public class MainActivity extends Activity {
         });
 
 
-        // 请选择您的初始化方式
-        //initAccessToken();
+        /**
+         * 请选择您的初始化方式
+         */
+        // license auth
+//        initAccessToken();
+
+        // key auth
         initAccessTokenWithAkSk();
     }
 
@@ -517,8 +522,7 @@ public class MainActivity extends Activity {
                 error.printStackTrace();
                 alertText("AK，SK方式获取token失败", error.getMessage());
             }
-        //}, getApplicationContext(),  "请填入您的AK", "请填入您的SK");
-        }, getApplicationContext(),  "F1rjDbZTP56GF6qRy2vIrfHY", "X1VxCX5pUUOYQFPPXHysSsXlAf06PWBg");
+        }, getApplicationContext(),  "1FWHU69yXCEW8hMS16od9yRB", "PQkG90F2LfQah4ENzovsi4lwLPmC9NiT");
     }
 
     /**
