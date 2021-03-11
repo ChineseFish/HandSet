@@ -98,7 +98,7 @@ public class MainActivity extends com.tongda.baiduveicleidentify.BaseMainActivit
                 return true;
             }
         });
-        webView.loadUrl("https://hwty.zsghtky.com/hwty/peIndex.html");
+        webView.loadUrl("http://60.12.217.106:53110/hchj");
 
         //
         initLog();
